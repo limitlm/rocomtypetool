@@ -1,10 +1,7 @@
 <template>
   <div class="app-container">
     <header class="header">
-      <div class="header-content">
-        <h1>洛克王国属性克制表</h1>
-        <p class="subtitle">点击属性查看详细克制关系</p>
-      </div>
+      <HeaderCard @viewChange="onViewChange" />
     </header>
     
     <main class="main-content">
@@ -36,7 +33,7 @@
     
     <footer class="footer">
       <div class="footer-content">
-        <p>洛克王国属性克制表 © 2026</p>
+        <p>洛克王国:世界——属性关系工具 © 2026</p>
         <p class="author">作者: Limitlm</p>
         <p class="license">MIT License | <a 
           href="https://github.com/limitlm" 
@@ -54,12 +51,19 @@ import { ref } from 'vue'
 import { TYPES } from './data/types.js'
 import TypeSelector from './components/TypeSelector.vue'
 import RelationPanel from './components/RelationPanel.vue'
+import HeaderCard from './components/HeaderCard.vue'
 
 /**
  * 当前选中的属性
  * @type {import('vue').Ref<Object|null>}
  */
 const selectedType = ref(null)
+
+/**
+ * 当前视图模式
+ * @type {import('vue').Ref<string>}
+ */
+const currentViewMode = ref('single')
 
 /**
  * 处理属性选择事件
@@ -75,6 +79,23 @@ function onTypeSelect(type) {
 function onPanelClose() {
   selectedType.value = null
 }
+
+/**
+ * 处理视图切换事件
+ * @param {string} view - 视图类型
+ */
+function onViewChange(view) {
+  currentViewMode.value = view
+  if (view === 'single') {
+    // 单属查询模式 - 保持当前功能
+  } else if (view === 'dual') {
+    // 双属查询模式 - 后续实现
+    console.log('双属查询功能即将推出')
+  } else if (view === 'multi') {
+    // 多属查询模式 - 后续实现
+    console.log('多属查询功能即将推出')
+  }
+}
 </script>
 
 <style scoped>
@@ -85,20 +106,10 @@ function onPanelClose() {
 }
 
 .header {
-  text-align: center;
-  padding: 1.25rem 1rem;
-  color: white;
-}
-
-.header-content h1 {
-  font-size: 1.6rem;
-  margin-bottom: 0.5rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.subtitle {
-  font-size: 0.9rem;
-  opacity: 0.9;
+  padding: 0.5rem 1rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .main-content {
@@ -202,10 +213,6 @@ function onPanelClose() {
     width: 100%;
   }
   
-  .header-content h1 {
-    font-size: 1.4rem;
-  }
-  
   .welcome-panel {
     padding: 1.5rem 1.25rem;
     min-height: 220px;
@@ -214,28 +221,24 @@ function onPanelClose() {
 
 @media (max-width: 768px) {
   .header {
-    padding: 1rem;
-  }
-  
-  .header-content h1 {
-    font-size: 1.25rem;
-  }
-  
-  .subtitle {
-    font-size: 0.8rem;
+    padding: 0.5rem 0.625rem;
   }
   
   .main-content {
-    padding: 0 0.625rem 1rem;
+    padding: 0 0.625rem 0.875rem;
+  }
+  
+  .content-wrapper {
+    gap: 0.625rem;
   }
   
   .welcome-panel {
-    padding: 1.25rem 1rem;
+    padding: 1rem 0.875rem;
     min-height: 180px;
   }
   
   .welcome-icon {
-    font-size: 2.75rem;
+    font-size: 2.5rem;
   }
   
   .welcome-panel h2 {
@@ -243,26 +246,22 @@ function onPanelClose() {
   }
   
   .footer {
-    padding: 0.75rem;
+    padding: 0.75rem 0.5rem;
     font-size: 0.7rem;
   }
   
   .footer .author {
-    font-size: 0.68rem;
+    font-size: 0.65rem;
   }
   
   .footer .license {
-    font-size: 0.65rem;
+    font-size: 0.625rem;
   }
 }
 
 @media (max-width: 540px) {
   .header {
-    padding: 0.75rem 0.5rem;
-  }
-  
-  .header-content h1 {
-    font-size: 1.15rem;
+    padding: 0.375rem 0.5rem;
   }
   
   .main-content {
@@ -274,7 +273,7 @@ function onPanelClose() {
   }
   
   .welcome-panel {
-    padding: 1rem 0.75rem;
+    padding: 0.875rem 0.75rem;
     min-height: 150px;
   }
   
@@ -298,7 +297,7 @@ function onPanelClose() {
   }
   
   .footer-content {
-    gap: 0.18rem;
+    gap: 0.15rem;
   }
 }
 </style>

@@ -135,24 +135,25 @@ defineEmits(['select'])
 
 @media (max-width: 768px) {
   .type-selector {
-    padding: 0.5625rem;
+    padding: 0.5rem;
   }
   
   .type-grid {
     grid-template-columns: repeat(4, 1fr);
-    gap: 0.375rem;
+    gap: 0.3125rem;
   }
   
   .type-card {
-    padding: 0.5rem 0.25rem;
+    padding: 0.4375rem 0.25rem;
   }
   
   .type-icon {
-    font-size: 1.15rem;
+    font-size: 1.2rem;
+    margin-bottom: 0.125rem;
   }
   
   .type-name {
-    font-size: 0.675rem;
+    font-size: 0.6875rem;
   }
 }
 
@@ -185,11 +186,11 @@ defineEmits(['select'])
   }
   
   .type-grid {
-    gap: 0.25rem;
+    gap: 0.1875rem;
   }
   
   .type-card {
-    padding: 0.375rem 0.15625rem;
+    padding: 0.3125rem 0.15625rem;
   }
   
   .type-icon {
@@ -197,7 +198,7 @@ defineEmits(['select'])
   }
   
   .type-name {
-    font-size: 0.59375rem;
+    font-size: 0.5625rem;
   }
 }
 </style>

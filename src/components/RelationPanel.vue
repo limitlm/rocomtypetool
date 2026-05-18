@@ -192,7 +192,7 @@ function handleTypeClick(typeId) {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.875rem;
+  padding: 0.5rem 0.75rem;
   background: linear-gradient(135deg, var(--type-color), rgba(0, 0, 0, 0.7));
   color: white;
   transition: background 0.3s ease;
@@ -201,16 +201,16 @@ function handleTypeClick(typeId) {
 .selected-type {
   display: flex;
   align-items: center;
-  gap: 0.625rem;
+  gap: 0.4rem;
 }
 
 .type-icon {
-  font-size: 2rem;
+  font-size: 1.4rem;
   transition: transform 0.3s ease;
 }
 
 .selected-type h2 {
-  font-size: 1.25rem;
+  font-size: 1rem;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
@@ -218,8 +218,8 @@ function handleTypeClick(typeId) {
   background: rgba(255, 255, 255, 0.2);
   border: none;
   border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  width: 26px;
+  height: 26px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -233,7 +233,7 @@ function handleTypeClick(typeId) {
 }
 
 .close-btn span {
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   font-weight: bold;
 }
 
@@ -251,7 +251,7 @@ function handleTypeClick(typeId) {
   border-radius: 10px;
   padding: 0.875rem;
   border: 2px solid transparent;
-  animation: fadeIn 0.3s ease;
+  animation: slideIn 0.3s ease;
 }
 
 .view-section.attack-view {
@@ -418,33 +418,9 @@ function handleTypeClick(typeId) {
 }
 
 @media (max-width: 1024px) {
-  .relation-panel {
-    margin-top: 1rem;
-  }
-  
   .relations-container {
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
-  }
-  
-  .panel-header {
-    padding: 1rem;
-  }
-  
-  .type-icon {
-    font-size: 1.75rem;
-  }
-  
-  .selected-type h2 {
-    font-size: 1.15rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .relations-container {
-    grid-template-columns: 1fr;
-    gap: 0.875rem;
-    padding: 1rem;
   }
   
   .panel-header {
@@ -452,11 +428,31 @@ function handleTypeClick(typeId) {
   }
   
   .type-icon {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
   }
   
   .selected-type h2 {
     font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .relations-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    padding: 0.875rem;
+  }
+  
+  .panel-header {
+    padding: 0.75rem;
+  }
+  
+  .type-icon {
+    font-size: 1.4rem;
+  }
+  
+  .selected-type h2 {
+    font-size: 1rem;
   }
   
   .view-section {
@@ -464,27 +460,33 @@ function handleTypeClick(typeId) {
   }
   
   .mini-type.clickable {
-    padding: 0.2rem 0.4rem;
-    font-size: 0.65rem;
+    padding: 0.3rem 0.4rem;
+    font-size: 0.6875rem;
+    min-width: 55px;
+  }
+  
+  .mini-icon {
+    font-size: 0.95rem;
   }
 }
 
 @media (max-width: 540px) {
   .panel-header {
-    padding: 0.75rem;
+    padding: 0.625rem 0.75rem;
   }
   
   .type-icon {
-    font-size: 1.35rem;
+    font-size: 1.25rem;
   }
   
   .selected-type h2 {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
   
   .relations-container {
-    padding: 0.75rem;
-    gap: 0.75rem;
+    grid-template-columns: 1fr;
+    padding: 0.625rem;
+    gap: 0.625rem;
   }
   
   .view-section {
@@ -492,16 +494,17 @@ function handleTypeClick(typeId) {
   }
   
   .relation-card {
-    padding: 0.625rem;
+    padding: 0.5625rem;
   }
   
   .mini-type.clickable {
-    padding: 0.18rem 0.35rem;
+    padding: 0.25rem 0.35rem;
     font-size: 0.625rem;
+    min-width: 50px;
   }
   
   .mini-icon {
-    font-size: 0.7rem;
+    font-size: 0.875rem;
   }
 }
 </style>
