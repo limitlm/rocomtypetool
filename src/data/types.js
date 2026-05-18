@@ -266,3 +266,127 @@ export function getDefenseRelations(typeId) {
 
   return result
 }
+
+/**
+ * 双属性克制关系缓存
+ */
+const DUAL_RELATIONS_CACHE = new Map()
+
+/**
+ * 获取两个数组的交集
+ * @param {Array} arr1 - 第一个数组
+ * @param {Array} arr2 - 第二个数组
+ * @returns {Array} 交集数组
+ */
+function getArrayIntersection(arr1, arr2) {
+  return arr1.filter(item => arr2.includes(item))
+}
+
+/**
+ * 获取两个数组的并集（去重）
+ * @param {Array} arr1 - 第一个数组
+ * @param {Array} arr2 - 第二个数组
+ * @returns {Array} 并集数组
+ */
+function getArrayUnion(arr1, arr2) {
+  return [...new Set([...arr1, ...arr2])]
+}
+
+/**
+ * 从数组中移除指定元素
+ * @param {Array} arr - 原数组
+ * @param {Array} itemsToRemove - 要移除的元素数组
+ * @returns {Array} 新数组
+ */
+function removeItemsFromArray(arr, itemsToRemove) {
+  return arr.filter(item => !itemsToRemove.includes(item))
+}
+
+/**
+ * 生成双属性组合的缓存键
+ * @param {string} typeId1 - 第一个属性ID
+ * @param {string} typeId2 - 第二个属性ID
+ * @returns {string} 缓存键
+ */
+function getDualCacheKey(typeId1, typeId2) {
+  const sorted = [typeId1, typeId2].sort()
+  return `${sorted[0]}_${sorted[1]}`
+}
+
+/**
+ * 获取双属性攻击关系
+ * @param {string} typeId1 - 第一个属性ID
+ * @param {string} typeId2 - 第二个属性ID
+ * @returns {Object} 包含superEffective和commonNotVeryEffective数组
+ */
+export function getDualAttackRelations(typeId1, typeId2) {
+  const cacheKey = getDualCacheKey(typeId1, typeId2)
+  if (DUAL_RELATIONS_CACHE.has(cacheKey)) {
+    const cached = DUAL_RELATIONS_CACHE.get(cacheKey)
+    return cached.attack
+  }
+
+  const relations1 = getAttackRelations(typeId1)
+  const relations2 = getAttackRelations(typeId2)
+
+  const result = {
+    superEffective: getArrayUnion(relations1.superEffective, relations2.superEffective),
+    commonNotVeryEffective: getArrayIntersection(relations1.notVeryEffective, relations2.notVeryEffective)
+  }
+
+  // 缓存完整的双属性关系
+  if (!DUAL_RELATIONS_CACHE.has(cacheKey)) {
+    DUAL_RELATIONS_CACHE.set(cacheKey, { attack: result, defense: null })
+  } else {
+    DUAL_RELATIONS_CACHE.get(cacheKey).attack = result
+  }
+
+  return result
+}
+
+/**
+ * 获取双属性防御关系
+ * @param {string} typeId1 - 第一个属性ID
+ * @param {string} typeId2 - 第二个属性ID
+ * @returns {Object} 包含被克制、强力克制、抵抗、强力抵抗的属性数组
+ */
+export function getDualDefenseRelations(typeId1, typeId2) {
+  const cacheKey = getDualCacheKey(typeId1, typeId2)
+  if (DUAL_RELATIONS_CACHE.has(cacheKey)) {
+    const cached = DUAL_RELATIONS_CACHE.get(cacheKey)
+    if (cached.defense) {
+      return cached.defense
+    }
+  }
+
+  const relations1 = getDefenseRelations(typeId1)
+  const relations2 = getDefenseRelations(typeId2)
+
+  // 被克制关系
+  const allSuperEffective = getArrayUnion(relations1.superEffective, relations2.superEffective)
+  const superEffectiveIntersection = getArrayIntersection(relations1.superEffective, relations2.superEffective)
+  const strongSuperEffective = superEffectiveIntersection
+  const normalSuperEffective = removeItemsFromArray(allSuperEffective, superEffectiveIntersection)
+
+  // 抵抗关系
+  const allNotVeryEffective = getArrayUnion(relations1.notVeryEffective, relations2.notVeryEffective)
+  const notVeryEffectiveIntersection = getArrayIntersection(relations1.notVeryEffective, relations2.notVeryEffective)
+  const strongNotVeryEffective = notVeryEffectiveIntersection
+  const normalNotVeryEffective = removeItemsFromArray(allNotVeryEffective, notVeryEffectiveIntersection)
+
+  const result = {
+    strongSuperEffective,
+    normalSuperEffective,
+    strongNotVeryEffective,
+    normalNotVeryEffective
+  }
+
+  // 缓存完整的双属性关系
+  if (!DUAL_RELATIONS_CACHE.has(cacheKey)) {
+    DUAL_RELATIONS_CACHE.set(cacheKey, { attack: null, defense: result })
+  } else {
+    DUAL_RELATIONS_CACHE.get(cacheKey).defense = result
+  }
+
+  return result
+}

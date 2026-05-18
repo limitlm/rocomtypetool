@@ -1,54 +1,107 @@
 <template>
   <div class="dual-query-container">
-    <div class="placeholder-card">
-      <div class="card-icon">⚡</div>
-      <h3>双属查询</h3>
-      <p>双属性克制关系查询功能开发中...</p>
-      <p class="coming-soon">即将推出</p>
+    <div class="content-wrapper">
+      <aside class="sidebar">
+        <DualTypeSelector 
+          :types="TYPES" 
+          :selected-types="selectedTypes" 
+          @update:selected-types="handleTypesUpdate"
+        />
+      </aside>
+      
+      <div class="main-area">
+        <DualRelationPanel 
+          :types="selectedTypes" 
+          @clear="handleClear"
+          @type-click="handleTypeClick"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
+import { TYPES } from '../../data/types.js'
+import DualTypeSelector from '../common/DualTypeSelector.vue'
+import DualRelationPanel from '../common/DualRelationPanel.vue'
+
+const selectedTypes = ref([])
+
+function handleTypesUpdate(types) {
+  selectedTypes.value = types
+}
+
+function handleClear() {
+  selectedTypes.value = []
+}
+
+function handleTypeClick(typeId) {
+  // 点击属性时，替换当前选择为该属性（如果已选择则移除）
+  const index = selectedTypes.value.findIndex(t => t.id === typeId)
+  if (index !== -1) {
+    selectedTypes.value.splice(index, 1)
+  } else {
+    const type = TYPES.find(t => t.id === typeId)
+    if (type) {
+      if (selectedTypes.value.length >= 2) {
+        selectedTypes.value = [type]
+      } else {
+        selectedTypes.value = [...selectedTypes.value, type]
+      }
+    }
+  }
+}
 </script>
 
 <style scoped>
 .dual-query-container {
   width: 100%;
   height: 100%;
+}
+
+.content-wrapper {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 1.25rem;
+  width: 100%;
+  height: 100%;
+}
+
+.sidebar {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
 }
 
-.placeholder-card {
-  background: white;
-  border-radius: 16px;
-  padding: 3rem 2rem;
-  text-align: center;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  max-width: 500px;
+.main-area {
+  display: flex;
+  flex-direction: column;
 }
 
-.card-icon {
-  font-size: 4rem;
-  margin-bottom: 1rem;
+@media (max-width: 1024px) {
+  .content-wrapper {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .sidebar {
+    width: 100%;
+  }
+  
+  .main-area {
+    width: 100%;
+  }
 }
 
-.placeholder-card h3 {
-  color: #333;
-  margin-bottom: 0.5rem;
-  font-size: 1.5rem;
+@media (max-width: 768px) {
+  .content-wrapper {
+    gap: 0.625rem;
+  }
 }
 
-.placeholder-card p {
-  color: #666;
-  margin-bottom: 0.5rem;
-}
-
-.coming-soon {
-  font-weight: 600;
-  color: #3b82f6;
-  margin-top: 1rem;
+@media (max-width: 540px) {
+  .content-wrapper {
+    gap: 0.5rem;
+  }
 }
 </style>
