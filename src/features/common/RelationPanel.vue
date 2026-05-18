@@ -122,7 +122,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { TYPES, getAttackRelations, getDefenseRelations, getTypeIcon, getTypeName, getTypeColor } from '../data/types.js'
+import { TYPES, getAttackRelations, getDefenseRelations, getTypeIcon, getTypeName, getTypeColor } from '../../data/types.js'
 
 const props = defineProps({
   type: {

@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-import { getTypeIcon } from '../data/types.js'
+import { getTypeIcon } from '../../data/types.js'
 
 defineProps({
   types: {
