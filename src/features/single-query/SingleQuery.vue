@@ -47,7 +47,6 @@ function handlePanelClose() {
 <style scoped>
 .single-query-container {
   width: 100%;
-  height: 100%;
 }
 
 .content-wrapper {
@@ -55,7 +54,6 @@ function handlePanelClose() {
   grid-template-columns: 260px 1fr;
   gap: 1.25rem;
   width: 100%;
-  height: 100%;
 }
 
 .sidebar {

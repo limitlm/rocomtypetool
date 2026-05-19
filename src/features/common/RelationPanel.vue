@@ -156,9 +156,6 @@ function handleTypeClick(typeId) {
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
   animation: slideIn 0.3s ease;
   transition: all 0.3s ease;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
 }
 
 .relation-panel.transitioning {
@@ -242,8 +239,6 @@ function handleTypeClick(typeId) {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.25rem;
-  flex: 1;
-  overflow-y: auto;
 }
 
 .view-section {

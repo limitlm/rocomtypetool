@@ -57,7 +57,6 @@ function handleTypeClick(typeId) {
 <style scoped>
 .dual-query-container {
   width: 100%;
-  height: 100%;
 }
 
 .content-wrapper {
@@ -65,7 +64,6 @@ function handleTypeClick(typeId) {
   grid-template-columns: 260px 1fr;
   gap: 1.25rem;
   width: 100%;
-  height: 100%;
 }
 
 .sidebar {

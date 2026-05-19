@@ -90,9 +90,6 @@ function handleTypeClick(type) {
   border-radius: 16px;
   padding: 0.875rem;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  height: 100%;
 }
 
 .selector-header {
@@ -120,8 +117,6 @@ function handleTypeClick(type) {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.4375rem;
-  overflow-y: auto;
-  flex: 1;
 }
 
 .type-card {
