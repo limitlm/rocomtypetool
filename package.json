@@ -1,7 +1,10 @@
 {
   "name": "RocomTypeTool",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "module",
+  "description": "洛克王国属性克制关系查询工具",
+  "author": "",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

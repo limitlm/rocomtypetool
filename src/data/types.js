@@ -345,7 +345,51 @@ export function getDualAttackRelations(typeId1, typeId2) {
 }
 
 /**
- * 获取双属性防御关系
+ * 获取单属性攻击关系（返回与双属性相同的格式）
+ * @param {string} typeId - 属性ID
+ * @returns {Object} 包含superEffective和commonNotVeryEffective数组
+ */
+export function getSingleAttackRelations(typeId) {
+  const relations = getAttackRelations(typeId)
+  return {
+    superEffective: relations.superEffective,
+    commonNotVeryEffective: relations.notVeryEffective
+  }
+}
+
+/**
+ * 获取单属性防御关系（返回与双属性相同的格式）
+ * @param {string} typeId - 属性ID
+ * @returns {Object} 包含被克制、强力克制、抵抗、强力抵抗的属性数组
+ */
+export function getSingleDefenseRelations(typeId) {
+  const relations = getDefenseRelations(typeId)
+  return {
+    strongSuperEffective: [],
+    normalSuperEffective: relations.superEffective,
+    strongNotVeryEffective: [],
+    normalNotVeryEffective: relations.notVeryEffective
+  }
+}
+
+/**
+ * 获取某个攻击属性对单一防守属性的克制系数
+ * @param {string} attackerTypeId - 攻击属性ID
+ * @param {string} defenderTypeId - 防守属性ID
+ * @returns {number} 克制系数 (0.5, 1, 2)
+ */
+function getMultiplier(attackerTypeId, defenderTypeId) {
+  const attackerRelations = TYPE_CHART[attackerTypeId]
+  if (!attackerRelations) return 1
+  if (attackerRelations.superEffective?.includes(defenderTypeId)) return 2
+  if (attackerRelations.notVeryEffective?.includes(defenderTypeId)) return 0.5
+  return 1
+}
+
+/**
+ * 获取双属性防御关系（修正版）
+ * 根据宝可梦/洛克王国等类游戏的标准双属性克制算法：
+ * 分别计算攻击属性对两个防守属性的克制系数，然后相乘得到最终系数
  * @param {string} typeId1 - 第一个属性ID
  * @param {string} typeId2 - 第二个属性ID
  * @returns {Object} 包含被克制、强力克制、抵抗、强力抵抗的属性数组
@@ -359,20 +403,30 @@ export function getDualDefenseRelations(typeId1, typeId2) {
     }
   }
 
-  const relations1 = getDefenseRelations(typeId1)
-  const relations2 = getDefenseRelations(typeId2)
+  const strongSuperEffective = [] // 4x (2*2)
+  const normalSuperEffective = [] // 2x (2*1 或 1*2)
+  const normalNotVeryEffective = [] // 0.5x (0.5*1 或 1*0.5)
+  const strongNotVeryEffective = [] // 0.25x (0.5*0.5)
 
-  // 被克制关系
-  const allSuperEffective = getArrayUnion(relations1.superEffective, relations2.superEffective)
-  const superEffectiveIntersection = getArrayIntersection(relations1.superEffective, relations2.superEffective)
-  const strongSuperEffective = superEffectiveIntersection
-  const normalSuperEffective = removeItemsFromArray(allSuperEffective, superEffectiveIntersection)
+  // 遍历所有可能的攻击属性
+  for (const attackerTypeId of Object.keys(TYPE_CHART)) {
+    // 计算攻击属性对两个防守属性的克制系数
+    const mult1 = getMultiplier(attackerTypeId, typeId1)
+    const mult2 = getMultiplier(attackerTypeId, typeId2)
+    const totalMult = mult1 * mult2
 
-  // 抵抗关系
-  const allNotVeryEffective = getArrayUnion(relations1.notVeryEffective, relations2.notVeryEffective)
-  const notVeryEffectiveIntersection = getArrayIntersection(relations1.notVeryEffective, relations2.notVeryEffective)
-  const strongNotVeryEffective = notVeryEffectiveIntersection
-  const normalNotVeryEffective = removeItemsFromArray(allNotVeryEffective, notVeryEffectiveIntersection)
+    // 根据总克制系数分类
+    if (totalMult === 4) {
+      strongSuperEffective.push(attackerTypeId)
+    } else if (totalMult === 2) {
+      normalSuperEffective.push(attackerTypeId)
+    } else if (totalMult === 0.5) {
+      normalNotVeryEffective.push(attackerTypeId)
+    } else if (totalMult === 0.25) {
+      strongNotVeryEffective.push(attackerTypeId)
+    }
+    // totalMult === 1 时不加入任何列表（正常伤害）
+  }
 
   const result = {
     strongSuperEffective,

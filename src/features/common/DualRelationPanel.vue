@@ -180,7 +180,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { TYPES, getDualAttackRelations, getDualDefenseRelations, getTypeIcon, getTypeName, getTypeColor } from '../../data/types.js'
+import { TYPES, getDualAttackRelations, getDualDefenseRelations, getSingleAttackRelations, getSingleDefenseRelations, getTypeIcon, getTypeName, getTypeColor } from '../../data/types.js'
 
 const props = defineProps({
   types: {
@@ -200,11 +200,7 @@ const emit = defineEmits(['clear', 'typeClick'])
 const attackRelations = computed(() => {
   if (props.types.length === 0) return { superEffective: [], commonNotVeryEffective: [] }
   if (props.types.length === 1) {
-    const single = getDualAttackRelations(props.types[0].id, props.types[0].id)
-    return {
-      superEffective: single.superEffective,
-      commonNotVeryEffective: []
-    }
+    return getSingleAttackRelations(props.types[0].id)
   }
   return getDualAttackRelations(props.types[0].id, props.types[1].id)
 })
@@ -217,13 +213,7 @@ const defenseRelations = computed(() => {
     normalNotVeryEffective: []
   }
   if (props.types.length === 1) {
-    const single = getDualDefenseRelations(props.types[0].id, props.types[0].id)
-    return {
-      strongSuperEffective: [],
-      normalSuperEffective: single.normalSuperEffective,
-      strongNotVeryEffective: [],
-      normalNotVeryEffective: single.normalNotVeryEffective
-    }
+    return getSingleDefenseRelations(props.types[0].id)
   }
   return getDualDefenseRelations(props.types[0].id, props.types[1].id)
 })
