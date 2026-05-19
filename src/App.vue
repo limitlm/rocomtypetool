@@ -83,7 +83,7 @@ function handleFeatureChange(featureId) {
 .header-card {
   background: white;
   border-radius: 12px;
-  padding: 0.625rem 1rem;
+  padding: 0.525rem 1rem;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
   text-align: center;
   transition: all 0.3s ease;

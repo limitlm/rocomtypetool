@@ -64,16 +64,23 @@ function handleTypeClick(typeId) {
   grid-template-columns: 260px 1fr;
   gap: 1.25rem;
   width: 100%;
+  align-items: stretch;
 }
 
 .sidebar {
   display: flex;
   flex-direction: column;
+  height: 100%;
+}
+
+.sidebar > * {
+  flex-shrink: 0;
 }
 
 .main-area {
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 @media (max-width: 1024px) {
