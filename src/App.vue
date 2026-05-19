@@ -27,7 +27,7 @@
     
     <footer class="footer">
       <div class="footer-content">
-        <p>洛克王国:世界——属性关系工具 © 2026</p>
+        <p>洛克王国:世界————属性关系工具 © 2026</p>
         <p class="author">作者: Limitlm</p>
         <p class="license">MIT License | <a 
           href="https://github.com/limitlm" 
@@ -67,46 +67,37 @@ function handleFeatureChange(featureId) {
 </script>
 
 <style scoped>
+/* 基础布局结构 */
 .app-container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
+/* 顶部导航 */
 .header {
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1rem;
   max-width: 1400px;
   margin: 0 auto;
   width: 100%;
+  flex-shrink: 0;
 }
 
 .header-card {
   background: white;
   border-radius: 12px;
-  padding: 0.525rem 1rem;
+  padding: 0.625rem 1rem;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
   text-align: center;
-  transition: all 0.3s ease;
-  animation: fadeIn 0.3s ease;
   width: 100%;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .button-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.875rem;
+  gap: 0.75rem;
   flex-wrap: wrap;
 }
 
@@ -123,37 +114,13 @@ function handleFeatureChange(featureId) {
   cursor: pointer;
   transition: all 0.3s ease;
   min-width: 90px;
-  position: relative;
-  overflow: hidden;
-  font-size: inherit;
-  color: inherit;
-}
-
-.query-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
-  transition: left 0.4s ease;
 }
 
 .query-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
   border-color: #3b82f6;
   background: linear-gradient(135deg, #ffffff, #f0f7ff);
-}
-
-.query-btn:hover::before {
-  left: 100%;
-}
-
-.query-btn:active {
-  transform: translateY(-1px);
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
 }
 
 .query-btn.active {
@@ -164,16 +131,12 @@ function handleFeatureChange(featureId) {
 }
 
 .btn-icon {
-  font-size: 1.35rem;
-  transition: transform 0.3s ease;
+  font-size: 1.4rem;
+  transition: transform 0.2s ease;
 }
 
 .query-btn:hover .btn-icon {
-  transform: scale(1.1);
-}
-
-.query-btn.active .btn-icon {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 
 .btn-text {
@@ -182,25 +145,32 @@ function handleFeatureChange(featureId) {
   letter-spacing: 0.025em;
 }
 
+/* 中间内容区域 */
 .main-content {
   flex: 1;
   padding: 0 1rem 1.25rem;
   max-width: 1400px;
   margin: 0 auto;
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .feature-component {
   width: 100%;
-  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
+/* 底部页脚 */
 .footer {
   text-align: center;
   padding: 1rem;
   color: white;
-  opacity: 0.85;
+  opacity: 0.9;
   font-size: 0.8rem;
+  flex-shrink: 0;
 }
 
 .footer-content {
@@ -211,26 +181,32 @@ function handleFeatureChange(featureId) {
 
 .footer .author {
   font-size: 0.75rem;
-  opacity: 0.9;
+  opacity: 0.95;
 }
 
 .footer .license {
   font-size: 0.7rem;
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
 .footer a {
   color: white;
   text-decoration: underline;
+  transition: opacity 0.2s;
 }
 
 .footer a:hover {
-  opacity: 0.8;
+  opacity: 0.7;
 }
 
+/* 响应式调整 */
 @media (max-width: 1024px) {
+  .header {
+    padding: 0.625rem 0.875rem;
+  }
+  
   .button-container {
-    gap: 0.75rem;
+    gap: 0.625rem;
   }
   
   .query-btn {
@@ -239,11 +215,11 @@ function handleFeatureChange(featureId) {
   }
   
   .btn-icon {
-    font-size: 1.25rem;
+    font-size: 1.3rem;
   }
   
-  .btn-text {
-    font-size: 0.71875rem;
+  .main-content {
+    padding: 0 0.875rem 1rem;
   }
 }
 
@@ -257,7 +233,7 @@ function handleFeatureChange(featureId) {
   }
   
   .button-container {
-    gap: 0.625rem;
+    gap: 0.5rem;
   }
   
   .query-btn {
@@ -266,24 +242,16 @@ function handleFeatureChange(featureId) {
   }
   
   .btn-icon {
-    font-size: 1.15rem;
+    font-size: 1.2rem;
   }
   
   .btn-text {
-    font-size: 0.6875rem;
-  }
-  
-  .footer {
-    padding: 0.75rem 0.5rem;
     font-size: 0.7rem;
   }
   
-  .footer .author {
-    font-size: 0.65rem;
-  }
-  
-  .footer .license {
-    font-size: 0.625rem;
+  .footer {
+    padding: 0.75rem 0.625rem;
+    font-size: 0.75rem;
   }
 }
 
@@ -297,30 +265,25 @@ function handleFeatureChange(featureId) {
   }
   
   .button-container {
-    gap: 0.5rem;
+    gap: 0.4375rem;
   }
   
   .query-btn {
     padding: 0.3125rem 0.5625rem;
     min-width: 70px;
-    gap: 0.1875rem;
   }
   
   .btn-icon {
-    font-size: 1.05rem;
+    font-size: 1.1rem;
   }
   
   .btn-text {
-    font-size: 0.625rem;
+    font-size: 0.65rem;
   }
   
   .footer {
     padding: 0.625rem 0.5rem;
-    font-size: 0.65rem;
-  }
-  
-  .footer-content {
-    gap: 0.15rem;
+    font-size: 0.7rem;
   }
 }
 
@@ -336,11 +299,11 @@ function handleFeatureChange(featureId) {
   }
   
   .btn-icon {
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
   
   .btn-text {
-    font-size: 0.5625rem;
+    font-size: 0.6rem;
   }
 }
 </style>

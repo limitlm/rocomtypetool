@@ -1,18 +1,29 @@
 <template>
   <div class="type-selector">
+    <div v-if="showHeader" class="selector-header">
+      <h3>{{ headerTitle }}</h3>
+      <p v-if="maxSelections > 1" class="selection-status">
+        已选择: {{ selectedTypes.length }}/{{ maxSelections }}
+      </p>
+    </div>
+    
     <div class="type-grid">
       <button
         v-for="type in types"
         :key="type.id"
         class="type-card"
-        :class="{ active: selectedType?.id === type.id }"
+        :class="{ 
+          active: isSelected(type.id), 
+          disabled: !isSelected(type.id) && maxSelections > 1 && selectedTypes.length >= maxSelections 
+        }"
         :style="{ 
           '--type-color': type.color,
           '--type-bg': type.bgColor
         }"
-        @click="$emit('select', type)"
-        :aria-pressed="selectedType?.id === type.id"
+        @click="handleTypeClick(type)"
+        :aria-pressed="isSelected(type.id)"
         :aria-label="`选择${type.name}属性`"
+        :disabled="!isSelected(type.id) && maxSelections > 1 && selectedTypes.length >= maxSelections"
       >
         <span class="type-icon">{{ getTypeIcon(type.id) }}</span>
         <span class="type-name">{{ type.name }}</span>
@@ -24,7 +35,7 @@
 <script setup>
 import { getTypeIcon } from '../../data/types.js'
 
-defineProps({
+const props = defineProps({
   types: {
     type: Array,
     required: true,
@@ -37,18 +48,50 @@ defineProps({
       )
     }
   },
-  selectedType: {
-    type: Object,
-    default: null,
-    validator: (value) => {
-      if (!value) return true
-      return typeof value.id === 'string' && 
-             typeof value.name === 'string'
-    }
+  selectedTypes: {
+    type: Array,
+    default: () => []
+  },
+  maxSelections: {
+    type: Number,
+    default: 1
+  },
+  showHeader: {
+    type: Boolean,
+    default: false
+  },
+  headerTitle: {
+    type: String,
+    default: '选择属性'
   }
 })
 
-defineEmits(['select'])
+const emit = defineEmits(['select', 'update:selectedTypes'])
+
+function isSelected(typeId) {
+  if (props.maxSelections === 1) {
+    return props.selectedTypes.length > 0 && props.selectedTypes[0].id === typeId
+  }
+  return props.selectedTypes.some(type => type.id === typeId)
+}
+
+function handleTypeClick(type) {
+  let newSelectedTypes = [...props.selectedTypes]
+  
+  if (props.maxSelections === 1) {
+    newSelectedTypes = newSelectedTypes.length > 0 && newSelectedTypes[0].id === type.id ? [] : [type]
+  } else {
+    const index = newSelectedTypes.findIndex(t => t.id === type.id)
+    if (index !== -1) {
+      newSelectedTypes.splice(index, 1)
+    } else if (newSelectedTypes.length < props.maxSelections) {
+      newSelectedTypes.push(type)
+    }
+  }
+  
+  emit('update:selectedTypes', newSelectedTypes)
+  emit('select', type)
+}
 </script>
 
 <style scoped>
@@ -59,18 +102,39 @@ defineEmits(['select'])
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
 }
 
+.selector-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+}
+
+.selector-header h3 {
+  font-size: 0.95rem;
+  color: #333;
+  margin: 0;
+}
+
+.selection-status {
+  font-size: 0.75rem;
+  color: #666;
+  margin: 0;
+}
+
 .type-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.4375rem;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.5rem;
 }
 
 .type-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0.6875rem 0.3125rem;
-  border-radius: 9px;
+  padding: 0.75rem 0.5rem;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.25s ease;
   border: 2px solid transparent;
@@ -85,7 +149,7 @@ defineEmits(['select'])
   outline-offset: 2px;
 }
 
-.type-card:hover {
+.type-card:hover:not(.disabled) {
   transform: translateY(-3px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
@@ -96,31 +160,83 @@ defineEmits(['select'])
   transform: scale(1.03);
 }
 
+.type-card.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .type-icon {
-  font-size: 1.4rem;
-  margin-bottom: 0.1875rem;
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
   line-height: 1.2;
 }
 
 .type-name {
-  font-size: 0.725rem;
+  font-size: 0.75rem;
   font-weight: 600;
   color: var(--type-color);
   text-align: center;
-  line-height: 1.15;
+  line-height: 1.2;
 }
 
-@media (max-width: 1024px) {
+/* 桌面超大屏幕 - 9列 */
+@media (min-width: 1280px) {
+  .type-grid {
+    grid-template-columns: repeat(9, 1fr);
+    gap: 0.5rem;
+  }
+  
+  .type-card {
+    padding: 0.625rem 0.375rem;
+  }
+  
+  .type-icon {
+    font-size: 1.4rem;
+  }
+  
+  .type-name {
+    font-size: 0.725rem;
+  }
+}
+
+/* 平板 - 6列 */
+@media (max-width: 1023px) and (min-width: 768px) {
   .type-selector {
-    padding: 0.6875rem;
+    padding: 0.75rem;
   }
   
   .type-grid {
     grid-template-columns: repeat(6, 1fr);
+    gap: 0.4375rem;
   }
   
   .type-card {
-    padding: 0.5625rem 0.3125rem;
+    padding: 0.625rem 0.4375rem;
+  }
+  
+  .type-icon {
+    font-size: 1.4rem;
+    margin-bottom: 0.1875rem;
+  }
+  
+  .type-name {
+    font-size: 0.725rem;
+  }
+}
+
+/* 小平板/大手机 - 6列 */
+@media (max-width: 767px) and (min-width: 540px) {
+  .type-selector {
+    padding: 0.625rem;
+  }
+  
+  .type-grid {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.375rem;
+  }
+  
+  .type-card {
+    padding: 0.5rem 0.375rem;
   }
   
   .type-icon {
@@ -133,72 +249,51 @@ defineEmits(['select'])
   }
 }
 
-@media (max-width: 768px) {
+/* 手机 - 3列 */
+@media (max-width: 539px) {
   .type-selector {
-    padding: 0.5rem;
-  }
-  
-  .type-grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.3125rem;
-  }
-  
-  .type-card {
-    padding: 0.4375rem 0.25rem;
-  }
-  
-  .type-icon {
-    font-size: 1.2rem;
-    margin-bottom: 0.125rem;
-  }
-  
-  .type-name {
-    font-size: 0.6875rem;
-  }
-}
-
-@media (max-width: 540px) {
-  .type-selector {
-    padding: 0.4375rem 0.375rem;
+    padding: 0.625rem 0.5rem;
   }
   
   .type-grid {
     grid-template-columns: repeat(3, 1fr);
+    gap: 0.4375rem;
+  }
+  
+  .type-card {
+    padding: 0.625rem 0.375rem;
+  }
+  
+  .type-icon {
+    font-size: 1.35rem;
+    margin-bottom: 0.1875rem;
+  }
+  
+  .type-name {
+    font-size: 0.725rem;
+  }
+}
+
+/* 小屏手机 - 3列紧凑 */
+@media (max-width: 400px) {
+  .type-selector {
+    padding: 0.5rem 0.375rem;
+  }
+  
+  .type-grid {
     gap: 0.3125rem;
   }
   
   .type-card {
-    padding: 0.4375rem 0.1875rem;
+    padding: 0.5rem 0.25rem;
   }
   
   .type-icon {
-    font-size: 1.05rem;
+    font-size: 1.25rem;
   }
   
   .type-name {
-    font-size: 0.625rem;
-  }
-}
-
-@media (max-width: 400px) {
-  .type-selector {
-    padding: 0.375rem 0.3125rem;
-  }
-  
-  .type-grid {
-    gap: 0.1875rem;
-  }
-  
-  .type-card {
-    padding: 0.3125rem 0.15625rem;
-  }
-  
-  .type-icon {
-    font-size: 0.95rem;
-  }
-  
-  .type-name {
-    font-size: 0.5625rem;
+    font-size: 0.6875rem;
   }
 }
 </style>

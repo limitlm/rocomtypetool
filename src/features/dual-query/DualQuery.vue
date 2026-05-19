@@ -1,17 +1,19 @@
 <template>
   <div class="dual-query-container">
     <div class="content-wrapper">
-      <aside class="sidebar">
-        <DualTypeSelector 
-          :types="TYPES" 
-          :selected-types="selectedTypes" 
+      <div class="selector-section">
+        <TypeSelector
+          :types="TYPES"
+          :selected-types="selectedTypes"
+          :max-selections="2"
+          :show-header="true"
           @update:selected-types="handleTypesUpdate"
         />
-      </aside>
+      </div>
       
-      <div class="main-area">
-        <DualRelationPanel 
-          :types="selectedTypes" 
+      <div class="panel-section">
+        <DualRelationPanel
+          :types="selectedTypes"
           @clear="handleClear"
           @type-click="handleTypeClick"
         />
@@ -23,7 +25,7 @@
 <script setup>
 import { ref } from 'vue'
 import { TYPES } from '../../data/types.js'
-import DualTypeSelector from '../common/DualTypeSelector.vue'
+import TypeSelector from '../common/TypeSelector.vue'
 import DualRelationPanel from '../common/DualRelationPanel.vue'
 
 const selectedTypes = ref([])
@@ -37,7 +39,6 @@ function handleClear() {
 }
 
 function handleTypeClick(typeId) {
-  // 点击属性时，替换当前选择为该属性（如果已选择则移除）
   const index = selectedTypes.value.findIndex(t => t.id === typeId)
   if (index !== -1) {
     selectedTypes.value.splice(index, 1)
@@ -60,47 +61,23 @@ function handleTypeClick(typeId) {
 }
 
 .content-wrapper {
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   width: 100%;
-  align-items: stretch;
 }
 
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+.selector-section {
+  width: 100%;
 }
 
-.sidebar > * {
-  flex-shrink: 0;
-}
-
-.main-area {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-@media (max-width: 1024px) {
-  .content-wrapper {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-  }
-  
-  .sidebar {
-    width: 100%;
-  }
-  
-  .main-area {
-    width: 100%;
-  }
+.panel-section {
+  width: 100%;
 }
 
 @media (max-width: 768px) {
   .content-wrapper {
-    gap: 0.625rem;
+    gap: 0.75rem;
   }
 }
 

@@ -1,15 +1,15 @@
 <template>
   <div class="single-query-container">
     <div class="content-wrapper">
-      <aside class="sidebar">
+      <div class="selector-section">
         <TypeSelector 
           :types="TYPES" 
-          :selected-type="selectedType" 
-          @select="handleTypeSelect" 
+          :selected-types="selectedType ? [selectedType] : []" 
+          @update:selected-types="handleTypesUpdate"
         />
-      </aside>
+      </div>
       
-      <div class="main-area">
+      <div class="panel-section">
         <RelationPanel 
           v-if="selectedType" 
           :type="selectedType" 
@@ -20,7 +20,7 @@
         <div v-else class="welcome-panel">
           <div class="welcome-icon">🎮</div>
           <h2>选择一个属性开始</h2>
-          <p>点击左侧属性图标，查看完整的克制关系</p>
+          <p>点击上方属性图标，查看完整的克制关系</p>
         </div>
       </div>
     </div>
@@ -34,6 +34,10 @@ import TypeSelector from '../common/TypeSelector.vue'
 import RelationPanel from '../common/RelationPanel.vue'
 
 const selectedType = ref(null)
+
+function handleTypesUpdate(types) {
+  selectedType.value = types.length > 0 ? types[0] : null
+}
 
 function handleTypeSelect(type) {
   selectedType.value = type
@@ -50,20 +54,18 @@ function handlePanelClose() {
 }
 
 .content-wrapper {
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   width: 100%;
 }
 
-.sidebar {
-  display: flex;
-  flex-direction: column;
+.selector-section {
+  width: 100%;
 }
 
-.main-area {
-  display: flex;
-  flex-direction: column;
+.panel-section {
+  width: 100%;
 }
 
 .welcome-panel {
@@ -72,12 +74,6 @@ function handlePanelClose() {
   padding: 2rem 1.5rem;
   text-align: center;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 280px;
 }
 
 .welcome-icon {
@@ -96,34 +92,13 @@ function handlePanelClose() {
   font-size: 0.85rem;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
   .content-wrapper {
-    grid-template-columns: 1fr;
     gap: 0.75rem;
-  }
-  
-  .sidebar {
-    width: 100%;
-  }
-  
-  .main-area {
-    width: 100%;
   }
   
   .welcome-panel {
     padding: 1.5rem 1.25rem;
-    min-height: 220px;
-  }
-}
-
-@media (max-width: 768px) {
-  .content-wrapper {
-    gap: 0.625rem;
-  }
-  
-  .welcome-panel {
-    padding: 1rem 0.875rem;
-    min-height: 180px;
   }
   
   .welcome-icon {
@@ -141,12 +116,11 @@ function handlePanelClose() {
   }
   
   .welcome-panel {
-    padding: 0.875rem 0.75rem;
-    min-height: 150px;
+    padding: 1rem 0.875rem;
   }
   
   .welcome-icon {
-    font-size: 2.25rem;
+    font-size: 2rem;
     margin-bottom: 0.5rem;
   }
   

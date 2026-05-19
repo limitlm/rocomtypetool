@@ -150,64 +150,34 @@ function handleTypeClick(typeId) {
 
 <style scoped>
 .relation-panel {
-  background: #ffffff;
+  background: white;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  animation: slideIn 0.3s ease;
-  transition: all 0.3s ease;
-}
-
-.relation-panel.transitioning {
-  opacity: 0.6;
-  transform: scale(0.98);
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
 }
 
 .panel-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0.75rem;
+  padding: 0.75rem;
   background: linear-gradient(135deg, var(--type-color), rgba(0, 0, 0, 0.7));
   color: white;
-  transition: background 0.3s ease;
 }
 
 .selected-type {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.5rem;
 }
 
 .type-icon {
-  font-size: 1.4rem;
-  transition: transform 0.3s ease;
+  font-size: 1.5rem;
 }
 
 .selected-type h2 {
-  font-size: 1rem;
+  font-size: 1.05rem;
+  margin: 0;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
@@ -215,8 +185,8 @@ function handleTypeClick(typeId) {
   background: rgba(255, 255, 255, 0.2);
   border: none;
   border-radius: 50%;
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -230,15 +200,15 @@ function handleTypeClick(typeId) {
 }
 
 .close-btn span {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: bold;
 }
 
 .relations-container {
-  padding: 0.875rem;
+  padding: 1rem;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1.25rem;
+  gap: 1rem;
 }
 
 .view-section {
@@ -246,7 +216,6 @@ function handleTypeClick(typeId) {
   border-radius: 10px;
   padding: 0.875rem;
   border: 2px solid transparent;
-  animation: slideIn 0.3s ease;
 }
 
 .view-section.attack-view {
@@ -269,7 +238,7 @@ function handleTypeClick(typeId) {
 }
 
 .view-icon {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
 }
 
 .view-title {
@@ -279,7 +248,7 @@ function handleTypeClick(typeId) {
 }
 
 .view-desc {
-  font-size: 0.6875rem;
+  font-size: 0.7rem;
   color: #6b7280;
   margin-left: auto;
 }
@@ -293,8 +262,6 @@ function handleTypeClick(typeId) {
 .relation-card {
   border-radius: 8px;
   padding: 0.75rem;
-  transition: all 0.3s ease;
-  animation: fadeIn 0.3s ease;
 }
 
 .relation-card.super-effective {
@@ -315,7 +282,7 @@ function handleTypeClick(typeId) {
 }
 
 .relation-icon {
-  font-size: 1rem;
+  font-size: 1.05rem;
 }
 
 .relation-title {
@@ -327,25 +294,25 @@ function handleTypeClick(typeId) {
 .damage-multiplier {
   margin-left: auto;
   font-weight: 700;
-  font-size: 0.6875rem;
+  font-size: 0.7rem;
   padding: 0.15rem 0.35rem;
   border-radius: 3px;
 }
 
 .super-effective .damage-multiplier {
   background: #dc2626;
-  color: #ffffff;
+  color: white;
 }
 
 .not-very-effective .damage-multiplier {
   background: #22c55e;
-  color: #ffffff;
+  color: white;
 }
 
 .type-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem;
+  gap: 0.4375rem;
 }
 
 .mini-type {
@@ -355,8 +322,8 @@ function handleTypeClick(typeId) {
   justify-content: center;
   gap: 0.25rem;
   padding: 0.4rem 0.5rem;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.95);
   color: var(--mini-color);
   font-size: 0.75rem;
   font-weight: 600;
@@ -368,37 +335,16 @@ function handleTypeClick(typeId) {
 .mini-type.clickable {
   cursor: pointer;
   transition: all 0.2s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.mini-type.clickable::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-  transition: left 0.3s ease;
 }
 
 .mini-type.clickable:hover {
-  transform: translateY(-2px) scale(1.05);
+  transform: translateY(-2px) scale(1.03);
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
   border-color: var(--mini-color);
 }
 
-.mini-type.clickable:hover::before {
-  left: 100%;
-}
-
-.mini-type.clickable:active {
-  transform: translateY(-1px) scale(1.02);
-}
-
 .mini-icon {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
 }
 
 .mini-name {
@@ -412,94 +358,65 @@ function handleTypeClick(typeId) {
   font-size: 0.75rem;
 }
 
-@media (max-width: 1024px) {
-  .relations-container {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-  }
-  
-  .panel-header {
-    padding: 0.875rem;
-  }
-  
-  .type-icon {
-    font-size: 1.6rem;
-  }
-  
-  .selected-type h2 {
-    font-size: 1.1rem;
-  }
-}
-
+/* 响应式调整 */
 @media (max-width: 768px) {
   .relations-container {
-    grid-template-columns: repeat(2, 1fr);
     gap: 0.75rem;
     padding: 0.875rem;
   }
   
   .panel-header {
-    padding: 0.75rem;
+    padding: 0.625rem;
   }
   
   .type-icon {
     font-size: 1.4rem;
   }
   
-  .selected-type h2 {
-    font-size: 1rem;
-  }
-  
   .view-section {
     padding: 0.75rem;
   }
   
   .mini-type.clickable {
-    padding: 0.3rem 0.4rem;
-    font-size: 0.6875rem;
-    min-width: 55px;
+    padding: 0.35rem 0.45rem;
+    min-width: 58px;
   }
   
   .mini-icon {
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
 }
 
 @media (max-width: 540px) {
   .panel-header {
-    padding: 0.625rem 0.75rem;
+    padding: 0.5rem;
   }
   
   .type-icon {
-    font-size: 1.25rem;
-  }
-  
-  .selected-type h2 {
-    font-size: 0.95rem;
+    font-size: 1.3rem;
   }
   
   .relations-container {
     grid-template-columns: 1fr;
-    padding: 0.625rem;
+    padding: 0.75rem;
     gap: 0.625rem;
   }
   
   .view-section {
-    padding: 0.625rem;
+    padding: 0.7rem;
   }
   
   .relation-card {
-    padding: 0.5625rem;
+    padding: 0.625rem;
   }
   
   .mini-type.clickable {
-    padding: 0.25rem 0.35rem;
-    font-size: 0.625rem;
-    min-width: 50px;
+    padding: 0.3rem 0.4rem;
+    min-width: 55px;
   }
   
   .mini-icon {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
 }
 </style>
