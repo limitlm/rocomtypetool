@@ -42,7 +42,7 @@
 
 <script setup>
 import { ref, computed, defineAsyncComponent, h } from 'vue'
-import { FEATURE_IDS, getEnabledFeatures } from './features/featureConfig.js'
+import { FEATURE_IDS, getEnabledFeatures, getFeatureById } from './features/featureConfig.js'
 
 const enabledFeatures = getEnabledFeatures()
 const currentFeatureId = ref(FEATURE_IDS.SINGLE_QUERY)
@@ -77,17 +77,11 @@ const ErrorComponent = {
   }
 }
 
-const componentLoaders = {
-  [FEATURE_IDS.SINGLE_QUERY]: () => import('./features/single-query/SingleQuery.vue'),
-  [FEATURE_IDS.DUAL_QUERY]: () => import('./features/dual-query/DualQuery.vue'),
-  [FEATURE_IDS.MULTI_QUERY]: () => import('./features/multi-query/MultiQuery.vue')
-}
-
 const featureComponents = enabledFeatures.reduce((acc, feature) => {
-  const loader = componentLoaders[feature.id]
-  if (loader) {
+  const config = getFeatureById(feature.id)
+  if (config && config.componentPath) {
     acc[feature.id] = defineAsyncComponent({
-      loader,
+      loader: () => import(/* @vite-ignore */ config.componentPath),
       loadingComponent: LoadingComponent,
       errorComponent: ErrorComponent
     })
