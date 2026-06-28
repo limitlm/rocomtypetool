@@ -170,7 +170,7 @@
         </div>
         <div class="suggestions-list">
           <div 
-            v-for="(suggestion, index) in suggestions" 
+            v-for="(suggestion, index) in suggestions.slice(0, 4)" 
             :key="suggestion.typeId"
             class="suggestion-card"
             @click="$emit('addType', suggestion.typeId)"
@@ -339,7 +339,7 @@ function handleClear() {
 
 .suggestions-list {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 0.5rem;
 }
 
@@ -353,6 +353,7 @@ function handleClear() {
   cursor: pointer;
   transition: all 0.2s;
   border: 1px solid transparent;
+  position: relative;
 }
 
 .suggestion-card:hover {
@@ -362,17 +363,29 @@ function handleClear() {
 }
 
 .suggestion-rank {
-  font-size: 0.7rem;
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  background: #3b82f6;
+  color: white;
+  font-size: 0.65rem;
   font-weight: 700;
-  color: #3b82f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.4);
 }
 
 .suggestion-type {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 0.125rem;
-  padding: 0.375rem;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.5rem;
   background: var(--type-bg);
   border-radius: 8px;
 }
@@ -389,8 +402,9 @@ function handleClear() {
 
 .suggestion-stats {
   display: flex;
-  flex-direction: column;
-  gap: 0.125rem;
+  flex-direction: row;
+  gap: 0.25rem;
+  justify-content: center;
 }
 
 .stat {
@@ -411,10 +425,12 @@ function handleClear() {
 }
 
 .suggestion-score {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #333;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #1e40af;
   text-align: center;
+  padding-top: 0.25rem;
+  border-top: 1px dashed #bfdbfe;
 }
 
 .relation-card {
@@ -504,7 +520,7 @@ function handleClear() {
   }
   
   .suggestions-list {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
   
   .scores-section {
@@ -525,7 +541,7 @@ function handleClear() {
   }
   
   .suggestions-list {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
   
   .scores-section {
@@ -545,7 +561,46 @@ function handleClear() {
   }
 
   .suggestions-list {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.25rem;
+  }
+
+  .suggestion-card {
+    padding: 0.25rem;
+    gap: 0.25rem;
+  }
+
+  .suggestion-type {
+    padding: 0.25rem;
+    gap: 0.25rem;
+  }
+
+  .suggestion-icon {
+    font-size: 0.85rem;
+  }
+
+  .suggestion-name {
+    font-size: 0.55rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .suggestion-rank {
+    width: 1rem;
+    height: 1rem;
+    font-size: 0.55rem;
+    top: -4px;
+    left: -4px;
+  }
+
+  .stat {
+    font-size: 0.5rem;
+    padding: 0.0625rem 0.125rem;
+  }
+
+  .suggestion-score {
+    font-size: 0.7rem;
   }
 
   .scores-section {
