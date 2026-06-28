@@ -26,46 +26,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import { TYPES } from '../../data/types.js'
 import TypeSelector from '../common/TypeSelector.vue'
 import MultiRelationPanel from '../common/MultiRelationPanel.vue'
+import { useTypeSelection } from '../../composables/useTypeSelection.js'
 
-const selectedTypes = ref([])
-
-function handleTypesUpdate(types) {
-  selectedTypes.value = types
-}
-
-function handleClear() {
-  selectedTypes.value = []
-}
-
-function handleTypeClick(typeId) {
-  const index = selectedTypes.value.findIndex(t => t.id === typeId)
-  if (index !== -1) {
-    selectedTypes.value.splice(index, 1)
-  } else {
-    const type = TYPES.find(t => t.id === typeId)
-    if (type && selectedTypes.value.length < 12) {
-      selectedTypes.value = [...selectedTypes.value, type]
-    }
-  }
-}
-
-function handleRemoveType(typeId) {
-  const index = selectedTypes.value.findIndex(t => t.id === typeId)
-  if (index !== -1) {
-    selectedTypes.value.splice(index, 1)
-  }
-}
-
-function handleAddType(typeId) {
-  const type = TYPES.find(t => t.id === typeId)
-  if (type && !selectedTypes.value.some(t => t.id === typeId) && selectedTypes.value.length < 12) {
-    selectedTypes.value = [...selectedTypes.value, type]
-  }
-}
+const { selectedTypes, handleTypesUpdate, handleClear, handleTypeClick, handleRemoveType, handleAddType } = useTypeSelection(12)
 </script>
 
 <style scoped>

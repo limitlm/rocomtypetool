@@ -50,7 +50,7 @@
           <div class="score-bar">
             <div class="score-fill" :style="{ width: (analysis?.defenseCoverage.score || 0) + '%' }"></div>
           </div>
-          <span class="score-desc">{{ (analysis?.defenseCoverage.resist.length || 0) + (analysis?.defenseCoverage.strongResist.length || 0) }}个属性被抵抗</span>
+          <span class="score-desc">{{ analysis?.defenseCoverage.resist.length || 0 }}个属性被抵抗</span>
         </div>
       </div>
       
@@ -64,21 +64,16 @@
           <div class="relation-card super-effective">
             <div class="relation-header">
               <span class="relation-icon">🔥</span>
-              <span class="relation-title">克制</span>
+              <span class="relation-title">我克制</span>
               <span class="damage-multiplier">2x</span>
             </div>
             <div class="type-list">
-              <button 
+              <TypeBadge 
                 v-for="t in analysis?.attackCoverage.superEffective" 
                 :key="t"
-                class="mini-type clickable"
-                :style="{ '--mini-color': getTypeColor(t) }"
-                @click="$emit('typeClick', t)"
-                :aria-label="`查看${getTypeName(t)}属性克制关系`"
-              >
-                <span class="mini-icon">{{ getTypeIcon(t) }}</span>
-                <span class="mini-name">{{ getTypeName(t) }}</span>
-              </button>
+                :type-id="t"
+                @click="$emit('typeClick', $event)"
+              />
               <span v-if="!analysis?.attackCoverage.superEffective.length" class="empty">无</span>
             </div>
           </div>
@@ -90,38 +85,28 @@
               <span class="damage-multiplier">1x</span>
             </div>
             <div class="type-list">
-              <button 
+              <TypeBadge 
                 v-for="t in analysis?.attackCoverage.normal" 
                 :key="t"
-                class="mini-type clickable"
-                :style="{ '--mini-color': getTypeColor(t) }"
-                @click="$emit('typeClick', t)"
-                :aria-label="`查看${getTypeName(t)}属性克制关系`"
-              >
-                <span class="mini-icon">{{ getTypeIcon(t) }}</span>
-                <span class="mini-name">{{ getTypeName(t) }}</span>
-              </button>
+                :type-id="t"
+                @click="$emit('typeClick', $event)"
+              />
             </div>
           </div>
           
           <div class="relation-card resisted">
             <div class="relation-header">
               <span class="relation-icon">🛡️</span>
-              <span class="relation-title">被抵抗</span>
+              <span class="relation-title">打击盲点</span>
               <span class="damage-multiplier">0.5x</span>
             </div>
             <div class="type-list">
-              <button 
+              <TypeBadge 
                 v-for="t in analysis?.attackCoverage.resisted" 
                 :key="t"
-                class="mini-type clickable"
-                :style="{ '--mini-color': getTypeColor(t) }"
-                @click="$emit('typeClick', t)"
-                :aria-label="`查看${getTypeName(t)}属性克制关系`"
-              >
-                <span class="mini-icon">{{ getTypeIcon(t) }}</span>
-                <span class="mini-name">{{ getTypeName(t) }}</span>
-              </button>
+                :type-id="t"
+                @click="$emit('typeClick', $event)"
+              />
               <span v-if="!analysis?.attackCoverage.resisted.length" class="empty">无</span>
             </div>
           </div>
@@ -139,20 +124,15 @@
             <div class="relation-header">
               <span class="relation-icon">💥</span>
               <span class="relation-title">弱点</span>
-              <span class="damage-multiplier">2x</span>
+              <span class="damage-multiplier">≥2x</span>
             </div>
             <div class="type-list">
-              <button 
+              <TypeBadge 
                 v-for="t in analysis?.defenseCoverage.weak" 
                 :key="t"
-                class="mini-type clickable"
-                :style="{ '--mini-color': getTypeColor(t) }"
-                @click="$emit('typeClick', t)"
-                :aria-label="`查看${getTypeName(t)}属性克制关系`"
-              >
-                <span class="mini-icon">{{ getTypeIcon(t) }}</span>
-                <span class="mini-name">{{ getTypeName(t) }}</span>
-              </button>
+                :type-id="t"
+                @click="$emit('typeClick', $event)"
+              />
               <span v-if="!analysis?.defenseCoverage.weak.length" class="empty">无</span>
             </div>
           </div>
@@ -164,17 +144,12 @@
               <span class="damage-multiplier">1x</span>
             </div>
             <div class="type-list">
-              <button 
+              <TypeBadge 
                 v-for="t in analysis?.defenseCoverage.normal" 
                 :key="t"
-                class="mini-type clickable"
-                :style="{ '--mini-color': getTypeColor(t) }"
-                @click="$emit('typeClick', t)"
-                :aria-label="`查看${getTypeName(t)}属性克制关系`"
-              >
-                <span class="mini-icon">{{ getTypeIcon(t) }}</span>
-                <span class="mini-name">{{ getTypeName(t) }}</span>
-              </button>
+                :type-id="t"
+                @click="$emit('typeClick', $event)"
+              />
             </div>
           </div>
           
@@ -182,43 +157,16 @@
             <div class="relation-header">
               <span class="relation-icon">🔰</span>
               <span class="relation-title">抵抗</span>
-              <span class="damage-multiplier">0.5x</span>
+              <span class="damage-multiplier">≤0.5x</span>
             </div>
             <div class="type-list">
-              <button 
+              <TypeBadge 
                 v-for="t in analysis?.defenseCoverage.resist" 
                 :key="t"
-                class="mini-type clickable"
-                :style="{ '--mini-color': getTypeColor(t) }"
-                @click="$emit('typeClick', t)"
-                :aria-label="`查看${getTypeName(t)}属性克制关系`"
-              >
-                <span class="mini-icon">{{ getTypeIcon(t) }}</span>
-                <span class="mini-name">{{ getTypeName(t) }}</span>
-              </button>
+                :type-id="t"
+                @click="$emit('typeClick', $event)"
+              />
               <span v-if="!analysis?.defenseCoverage.resist.length" class="empty">无</span>
-            </div>
-          </div>
-          
-          <div class="relation-card strong-resist">
-            <div class="relation-header">
-              <span class="relation-icon">🛡️</span>
-              <span class="relation-title">强力抵抗</span>
-              <span class="damage-multiplier">0.25x</span>
-            </div>
-            <div class="type-list">
-              <button 
-                v-for="t in analysis?.defenseCoverage.strongResist" 
-                :key="t"
-                class="mini-type clickable"
-                :style="{ '--mini-color': getTypeColor(t) }"
-                @click="$emit('typeClick', t)"
-                :aria-label="`查看${getTypeName(t)}属性克制关系`"
-              >
-                <span class="mini-icon">{{ getTypeIcon(t) }}</span>
-                <span class="mini-name">{{ getTypeName(t) }}</span>
-              </button>
-              <span v-if="!analysis?.defenseCoverage.strongResist.length" class="empty">无</span>
             </div>
           </div>
         </div>
@@ -261,6 +209,7 @@
 <script setup>
 import { computed } from 'vue'
 import { TYPES, analyzeMultiTeam, suggestTeamCombinations, getTypeIcon, getTypeName, getTypeColor, getTypeBgColor } from '../../data/types.js'
+import TypeBadge from './TypeBadge.vue'
 import './relationPanelStyles.css'
 
 const props = defineProps({
@@ -584,11 +533,6 @@ function handleClear() {
   border-left: 3px solid #22c55e;
 }
 
-.relation-card.strong-resist {
-  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
-  border-left: 3px solid #047857;
-}
-
 .normal-effective .damage-multiplier {
   background: #d97706;
 }
@@ -607,10 +551,6 @@ function handleClear() {
 
 .resist .damage-multiplier {
   background: #22c55e;
-}
-
-.strong-resist .damage-multiplier {
-  background: #047857;
 }
 
 .welcome-panel {

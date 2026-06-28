@@ -23,36 +23,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import { TYPES } from '../../data/types.js'
 import TypeSelector from '../common/TypeSelector.vue'
 import DualRelationPanel from '../common/DualRelationPanel.vue'
+import { useTypeSelection } from '../../composables/useTypeSelection.js'
 
-const selectedTypes = ref([])
-
-function handleTypesUpdate(types) {
-  selectedTypes.value = types
-}
-
-function handleClear() {
-  selectedTypes.value = []
-}
-
-function handleTypeClick(typeId) {
-  const index = selectedTypes.value.findIndex(t => t.id === typeId)
-  if (index !== -1) {
-    selectedTypes.value.splice(index, 1)
-  } else {
-    const type = TYPES.find(t => t.id === typeId)
-    if (type) {
-      if (selectedTypes.value.length >= 2) {
-        selectedTypes.value = [type]
-      } else {
-        selectedTypes.value = [...selectedTypes.value, type]
-      }
-    }
-  }
-}
+const { selectedTypes, handleTypesUpdate, handleClear, handleTypeClick } = useTypeSelection(2)
 </script>
 
 <style scoped>

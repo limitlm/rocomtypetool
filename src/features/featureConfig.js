@@ -54,3 +54,12 @@ export function getEnabledFeatures() {
 export function getFeatureById(id) {
   return FEATURE_CONFIGS.find(config => config.id === id) || null
 }
+
+/**
+ * 根据功能模块配置动态加载组件
+ * @param {Object} featureConfig - 功能模块配置
+ * @returns {Promise<Component>} 组件Promise
+ */
+export function loadFeatureComponent(featureConfig) {
+  return import(featureConfig.componentPath)
+}

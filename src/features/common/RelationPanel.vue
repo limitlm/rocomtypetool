@@ -25,17 +25,12 @@
               <span class="damage-multiplier">2x</span>
             </div>
             <div class="type-list">
-              <button 
+              <TypeBadge 
                 v-for="t in attackRelations.superEffective" 
                 :key="t"
-                class="mini-type clickable"
-                :style="{ '--mini-color': getTypeColor(t) }"
-                @click="handleTypeClick(t)"
-                :aria-label="`查看${getTypeName(t)}属性克制关系`"
-              >
-                <span class="mini-icon">{{ getTypeIcon(t) }}</span>
-                <span class="mini-name">{{ getTypeName(t) }}</span>
-              </button>
+                :type-id="t"
+                @click="handleTypeClick"
+              />
               <span v-if="attackRelations.superEffective.length === 0" class="empty">无</span>
             </div>
           </div>
@@ -47,17 +42,12 @@
               <span class="damage-multiplier">0.5x</span>
             </div>
             <div class="type-list">
-              <button 
+              <TypeBadge 
                 v-for="t in attackRelations.notVeryEffective" 
                 :key="t"
-                class="mini-type clickable"
-                :style="{ '--mini-color': getTypeColor(t) }"
-                @click="handleTypeClick(t)"
-                :aria-label="`查看${getTypeName(t)}属性克制关系`"
-              >
-                <span class="mini-icon">{{ getTypeIcon(t) }}</span>
-                <span class="mini-name">{{ getTypeName(t) }}</span>
-              </button>
+                :type-id="t"
+                @click="handleTypeClick"
+              />
               <span v-if="attackRelations.notVeryEffective.length === 0" class="empty">无</span>
             </div>
           </div>
@@ -78,17 +68,12 @@
               <span class="damage-multiplier">2x</span>
             </div>
             <div class="type-list">
-              <button 
+              <TypeBadge 
                 v-for="t in defenseRelations.superEffective" 
                 :key="t"
-                class="mini-type clickable"
-                :style="{ '--mini-color': getTypeColor(t) }"
-                @click="handleTypeClick(t)"
-                :aria-label="`查看${getTypeName(t)}属性克制关系`"
-              >
-                <span class="mini-icon">{{ getTypeIcon(t) }}</span>
-                <span class="mini-name">{{ getTypeName(t) }}</span>
-              </button>
+                :type-id="t"
+                @click="handleTypeClick"
+              />
               <span v-if="defenseRelations.superEffective.length === 0" class="empty">无</span>
             </div>
           </div>
@@ -100,17 +85,12 @@
               <span class="damage-multiplier">0.5x</span>
             </div>
             <div class="type-list">
-              <button 
+              <TypeBadge 
                 v-for="t in defenseRelations.notVeryEffective" 
                 :key="t"
-                class="mini-type clickable"
-                :style="{ '--mini-color': getTypeColor(t) }"
-                @click="handleTypeClick(t)"
-                :aria-label="`查看${getTypeName(t)}属性克制关系`"
-              >
-                <span class="mini-icon">{{ getTypeIcon(t) }}</span>
-                <span class="mini-name">{{ getTypeName(t) }}</span>
-              </button>
+                :type-id="t"
+                @click="handleTypeClick"
+              />
               <span v-if="defenseRelations.notVeryEffective.length === 0" class="empty">无</span>
             </div>
           </div>
@@ -122,7 +102,8 @@
 
 <script setup>
 import { computed } from 'vue'
-import { TYPES, getAttackRelations, getDefenseRelations, getTypeIcon, getTypeName, getTypeColor } from '../../data/types.js'
+import { TYPES, getAttackRelations, getDefenseRelations, getTypeIcon } from '../../data/types.js'
+import TypeBadge from './TypeBadge.vue'
 import './relationPanelStyles.css'
 
 const props = defineProps({

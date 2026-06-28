@@ -28,23 +28,22 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed } from 'vue'
 import { TYPES } from '../../data/types.js'
 import TypeSelector from '../common/TypeSelector.vue'
 import RelationPanel from '../common/RelationPanel.vue'
+import { useTypeSelection } from '../../composables/useTypeSelection.js'
 
-const selectedType = ref(null)
+const { selectedTypes, handleTypesUpdate } = useTypeSelection(1)
 
-function handleTypesUpdate(types) {
-  selectedType.value = types.length > 0 ? types[0] : null
-}
+const selectedType = computed(() => selectedTypes.value.length > 0 ? selectedTypes.value[0] : null)
 
 function handleTypeSelect(type) {
-  selectedType.value = type
+  selectedTypes.value = [type]
 }
 
 function handlePanelClose() {
-  selectedType.value = null
+  selectedTypes.value = []
 }
 </script>
 

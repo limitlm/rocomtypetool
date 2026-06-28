@@ -41,21 +41,59 @@
 </template>
 
 <script setup>
-import { ref, computed, defineAsyncComponent } from 'vue'
-import { FEATURE_IDS, getEnabledFeatures, getFeatureById } from './features/featureConfig.js'
-
-const SingleQuery = defineAsyncComponent(() => import('./features/single-query/SingleQuery.vue'))
-const DualQuery = defineAsyncComponent(() => import('./features/dual-query/DualQuery.vue'))
-const MultiQuery = defineAsyncComponent(() => import('./features/multi-query/MultiQuery.vue'))
+import { ref, computed, defineAsyncComponent, h } from 'vue'
+import { FEATURE_IDS, getEnabledFeatures } from './features/featureConfig.js'
 
 const enabledFeatures = getEnabledFeatures()
 const currentFeatureId = ref(FEATURE_IDS.SINGLE_QUERY)
 
-const featureComponents = {
-  [FEATURE_IDS.SINGLE_QUERY]: SingleQuery,
-  [FEATURE_IDS.DUAL_QUERY]: DualQuery,
-  [FEATURE_IDS.MULTI_QUERY]: MultiQuery
+const LoadingComponent = {
+  render() {
+    return h('div', {
+      style: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '200px',
+        fontSize: '1.2rem',
+        color: '#666'
+      }
+    }, '加载中...')
+  }
 }
+
+const ErrorComponent = {
+  render() {
+    return h('div', {
+      style: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '200px',
+        fontSize: '1.2rem',
+        color: '#dc2626'
+      }
+    }, '加载失败，请刷新重试')
+  }
+}
+
+const componentLoaders = {
+  [FEATURE_IDS.SINGLE_QUERY]: () => import('./features/single-query/SingleQuery.vue'),
+  [FEATURE_IDS.DUAL_QUERY]: () => import('./features/dual-query/DualQuery.vue'),
+  [FEATURE_IDS.MULTI_QUERY]: () => import('./features/multi-query/MultiQuery.vue')
+}
+
+const featureComponents = enabledFeatures.reduce((acc, feature) => {
+  const loader = componentLoaders[feature.id]
+  if (loader) {
+    acc[feature.id] = defineAsyncComponent({
+      loader,
+      loadingComponent: LoadingComponent,
+      errorComponent: ErrorComponent
+    })
+  }
+  return acc
+}, {})
 
 const currentFeatureComponent = computed(() => {
   return featureComponents[currentFeatureId.value]
