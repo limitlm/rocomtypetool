@@ -1,54 +1,102 @@
 <template>
   <div class="multi-query-container">
-    <div class="placeholder-card">
-      <div class="card-icon">🌟</div>
-      <h3>多属查询</h3>
-      <p>多属性克制关系查询功能开发中...</p>
-      <p class="coming-soon">即将推出</p>
+    <div class="content-wrapper">
+      <div class="selector-section">
+        <TypeSelector
+          :types="TYPES"
+          :selected-types="selectedTypes"
+          :max-selections="12"
+          :show-header="true"
+          header-title="选择属性"
+          @update:selected-types="handleTypesUpdate"
+        />
+      </div>
+      
+      <div class="panel-section">
+        <MultiRelationPanel
+          :types="selectedTypes"
+          @clear="handleClear"
+          @type-click="handleTypeClick"
+          @remove-type="handleRemoveType"
+          @add-type="handleAddType"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
+import { TYPES } from '../../data/types.js'
+import TypeSelector from '../common/TypeSelector.vue'
+import MultiRelationPanel from '../common/MultiRelationPanel.vue'
+
+const selectedTypes = ref([])
+
+function handleTypesUpdate(types) {
+  selectedTypes.value = types
+}
+
+function handleClear() {
+  selectedTypes.value = []
+}
+
+function handleTypeClick(typeId) {
+  const index = selectedTypes.value.findIndex(t => t.id === typeId)
+  if (index !== -1) {
+    selectedTypes.value.splice(index, 1)
+  } else {
+    const type = TYPES.find(t => t.id === typeId)
+    if (type && selectedTypes.value.length < 12) {
+      selectedTypes.value = [...selectedTypes.value, type]
+    }
+  }
+}
+
+function handleRemoveType(typeId) {
+  const index = selectedTypes.value.findIndex(t => t.id === typeId)
+  if (index !== -1) {
+    selectedTypes.value.splice(index, 1)
+  }
+}
+
+function handleAddType(typeId) {
+  const type = TYPES.find(t => t.id === typeId)
+  if (type && !selectedTypes.value.some(t => t.id === typeId) && selectedTypes.value.length < 12) {
+    selectedTypes.value = [...selectedTypes.value, type]
+  }
+}
 </script>
 
 <style scoped>
 .multi-query-container {
   width: 100%;
-  height: 100%;
+}
+
+.content-wrapper {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
 }
 
-.placeholder-card {
-  background: white;
-  border-radius: 16px;
-  padding: 3rem 2rem;
-  text-align: center;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  max-width: 500px;
+.selector-section {
+  width: 100%;
 }
 
-.card-icon {
-  font-size: 4rem;
-  margin-bottom: 1rem;
+.panel-section {
+  width: 100%;
 }
 
-.placeholder-card h3 {
-  color: #333;
-  margin-bottom: 0.5rem;
-  font-size: 1.5rem;
+@media (max-width: 768px) {
+  .content-wrapper {
+    gap: 0.75rem;
+  }
 }
 
-.placeholder-card p {
-  color: #666;
-  margin-bottom: 0.5rem;
-}
-
-.coming-soon {
-  font-weight: 600;
-  color: #3b82f6;
-  margin-top: 1rem;
+@media (max-width: 540px) {
+  .content-wrapper {
+    gap: 0.5rem;
+  }
 }
 </style>

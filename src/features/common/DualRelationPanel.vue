@@ -181,6 +181,7 @@
 <script setup>
 import { computed } from 'vue'
 import { TYPES, getDualAttackRelations, getDualDefenseRelations, getSingleAttackRelations, getSingleDefenseRelations, getTypeIcon, getTypeName, getTypeColor } from '../../data/types.js'
+import './relationPanelStyles.css'
 
 const props = defineProps({
   types: {
@@ -309,64 +310,11 @@ function handleTypeClick(typeId) {
 }
 
 .view-section {
-  background: #f8f9fa;
-  border-radius: 10px;
-  padding: 0.875rem;
-  border: 2px solid transparent;
   animation: slideIn 0.3s ease;
 }
 
-.view-section.attack-view {
-  background: linear-gradient(135deg, #fff8f0, #fff0e0);
-  border-color: rgba(251, 146, 60, 0.3);
-}
-
-.view-section.defense-view {
-  background: linear-gradient(135deg, #f0f8ff, #e8f4fd);
-  border-color: rgba(59, 130, 246, 0.3);
-}
-
-.view-header {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding-bottom: 0.625rem;
-  margin-bottom: 0.625rem;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.08);
-}
-
-.view-icon {
-  font-size: 1.1rem;
-}
-
-.view-title {
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: #1f2937;
-}
-
-.view-desc {
-  font-size: 0.6875rem;
-  color: #6b7280;
-  margin-left: auto;
-}
-
-.view-cards {
-  display: flex;
-  flex-direction: column;
-  gap: 0.625rem;
-}
-
 .relation-card {
-  border-radius: 8px;
-  padding: 0.75rem;
-  transition: all 0.3s ease;
   animation: fadeIn 0.3s ease;
-}
-
-.relation-card.super-effective {
-  background: linear-gradient(135deg, #fff0f0, #ffe0e0);
-  border-left: 3px solid #dc2626;
 }
 
 .relation-card.common-not-very-effective {
@@ -394,36 +342,6 @@ function handleTypeClick(typeId) {
   border-left: 3px solid #22c55e;
 }
 
-.relation-header {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  margin-bottom: 0.4rem;
-}
-
-.relation-icon {
-  font-size: 1rem;
-}
-
-.relation-title {
-  font-weight: 600;
-  font-size: 0.85rem;
-  color: #374151;
-}
-
-.damage-multiplier {
-  margin-left: auto;
-  font-weight: 700;
-  font-size: 0.6875rem;
-  padding: 0.15rem 0.35rem;
-  border-radius: 3px;
-  color: white;
-}
-
-.super-effective .damage-multiplier {
-  background: #dc2626;
-}
-
 .common-not-very-effective .damage-multiplier {
   background: #22c55e;
 }
@@ -442,76 +360,6 @@ function handleTypeClick(typeId) {
 
 .normal-not-very-effective .damage-multiplier {
   background: #22c55e;
-}
-
-.type-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-}
-
-.mini-type {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.25rem;
-  padding: 0.4rem 0.5rem;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.9);
-  color: var(--mini-color);
-  font-size: 0.75rem;
-  font-weight: 600;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  min-width: 65px;
-}
-
-.mini-type.clickable {
-  cursor: pointer;
-  transition: all 0.2s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.mini-type.clickable::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-  transition: left 0.3s ease;
-}
-
-.mini-type.clickable:hover {
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
-  border-color: var(--mini-color);
-}
-
-.mini-type.clickable:hover::before {
-  left: 100%;
-}
-
-.mini-type.clickable:active {
-  transform: translateY(-1px) scale(1.02);
-}
-
-.mini-icon {
-  font-size: 1.1rem;
-}
-
-.mini-name {
-  line-height: 1.2;
-  text-align: center;
-}
-
-.empty {
-  color: #9ca3af;
-  font-style: italic;
-  font-size: 0.75rem;
 }
 
 .welcome-panel {
@@ -542,28 +390,6 @@ function handleTypeClick(typeId) {
   font-size: 0.85rem;
 }
 
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
 @media (max-width: 1024px) {
   .relations-container {
     grid-template-columns: repeat(2, 1fr);
@@ -591,20 +417,6 @@ function handleTypeClick(typeId) {
     padding: 0.75rem;
   }
   
-  .view-section {
-    padding: 0.75rem;
-  }
-  
-  .mini-type.clickable {
-    padding: 0.3rem 0.4rem;
-    font-size: 0.6875rem;
-    min-width: 55px;
-  }
-  
-  .mini-icon {
-    font-size: 0.95rem;
-  }
-  
   .welcome-panel {
     padding: 1rem 0.875rem;
     min-height: 180px;
@@ -628,24 +440,6 @@ function handleTypeClick(typeId) {
     grid-template-columns: 1fr;
     padding: 0.625rem;
     gap: 0.625rem;
-  }
-  
-  .view-section {
-    padding: 0.625rem;
-  }
-  
-  .relation-card {
-    padding: 0.5625rem;
-  }
-  
-  .mini-type.clickable {
-    padding: 0.25rem 0.35rem;
-    font-size: 0.625rem;
-    min-width: 50px;
-  }
-  
-  .mini-icon {
-    font-size: 0.875rem;
   }
   
   .welcome-panel {
