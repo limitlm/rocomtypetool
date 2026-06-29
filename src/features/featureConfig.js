@@ -17,7 +17,6 @@ export const FEATURE_CONFIGS = [
     name: '单属查询',
     icon: '🔍',
     description: '查询单个属性的克制关系',
-    componentPath: './features/single-query/SingleQuery.vue',
     enabled: true
   },
   {
@@ -25,7 +24,6 @@ export const FEATURE_CONFIGS = [
     name: '双属查询',
     icon: '⚡',
     description: '查询双属性的克制关系',
-    componentPath: './features/dual-query/DualQuery.vue',
     enabled: true
   },
   {
@@ -33,7 +31,6 @@ export const FEATURE_CONFIGS = [
     name: '多属查询',
     icon: '🌟',
     description: '查询多属性的克制关系',
-    componentPath: './features/multi-query/MultiQuery.vue',
     enabled: true
   }
 ]
@@ -46,27 +43,5 @@ export function getEnabledFeatures() {
   return FEATURE_CONFIGS.filter(config => config.enabled)
 }
 
-/**
- * 根据ID获取功能模块配置
- * @param {string} id - 功能模块ID
- * @returns {Object|null} 功能模块配置
- */
-export function getFeatureById(id) {
-  return FEATURE_CONFIGS.find(config => config.id === id) || null
-}
 
-// 使用 Vite glob import 预加载所有功能组件，支持静态分析
-const featureComponents = import.meta.glob('./**/Query.vue')
 
-/**
- * 根据功能模块配置动态加载组件
- * @param {Object} featureConfig - 功能模块配置
- * @returns {Promise<Component>} 组件Promise
- */
-export function loadFeatureComponent(featureConfig) {
-  const path = featureConfig.componentPath
-  if (featureComponents[path]) {
-    return featureComponents[path]()
-  }
-  throw new Error(`Component not found: ${path}`)
-}
