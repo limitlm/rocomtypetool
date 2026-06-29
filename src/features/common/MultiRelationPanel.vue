@@ -68,13 +68,13 @@
             </div>
             <div class="suggestion-stats">
               <span v-if="suggestion.weakReduction > 0" class="stat weak-reduction">
-                弱点-{{ suggestion.weakReduction }}
+                弱点 -{{ suggestion.weakReduction }}
               </span>
               <span v-if="suggestion.attackIncrease > 0" class="stat attack-increase">
-                打击+{{ suggestion.attackIncrease }}
+                打击 +{{ suggestion.attackIncrease }}
               </span>
               <span v-if="suggestion.resistGain > 0" class="stat resist-increase">
-                抵抗+{{ suggestion.resistGain }}
+                抵抗 +{{ suggestion.resistGain }}
               </span>
             </div>
             <span class="suggestion-score">{{ suggestion.totalScore }}</span>
