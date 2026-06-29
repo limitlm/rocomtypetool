@@ -1,17 +1,17 @@
 <template>
   <div class="dual-query-container">
     <div class="content-wrapper">
-      <div class="selector-section">
+      <div ref="selectorRef" class="selector-section">
         <TypeSelector
           :types="TYPES"
           :selected-types="selectedTypes"
           :max-selections="2"
           :show-header="true"
-          @update:selected-types="handleTypesUpdate"
+          @update:selected-types="onTypesUpdate"
         />
       </div>
       
-      <div class="panel-section">
+      <div ref="panelRef" class="panel-section">
         <DualRelationPanel
           :types="selectedTypes"
           @clear="handleClear"
@@ -23,12 +23,27 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { TYPES } from '../../data/types.js'
 import TypeSelector from '../common/TypeSelector.vue'
 import DualRelationPanel from '../common/DualRelationPanel.vue'
 import { useTypeSelection } from '../../composables/useTypeSelection.js'
 
+const selectorRef = ref(null)
+const panelRef = ref(null)
+
 const { selectedTypes, handleTypesUpdate, handleClear, handleTypeClick } = useTypeSelection(2)
+
+function scrollToPanel() {
+  panelRef.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
+function onTypesUpdate(types) {
+  handleTypesUpdate(types)
+  if (types.length > 0) {
+    scrollToPanel()
+  }
+}
 </script>
 
 <style scoped>

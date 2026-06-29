@@ -1,15 +1,15 @@
 <template>
   <div class="single-query-container">
     <div class="content-wrapper">
-      <div class="selector-section">
+      <div ref="selectorRef" class="selector-section">
         <TypeSelector 
           :types="TYPES" 
           :selected-types="selectedType ? [selectedType] : []" 
-          @update:selected-types="handleTypesUpdate"
+          @update:selected-types="onTypesUpdate"
         />
       </div>
       
-      <div class="panel-section">
+      <div ref="panelRef" class="panel-section">
         <RelationPanel 
           v-if="selectedType" 
           :type="selectedType" 
@@ -28,11 +28,14 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { TYPES } from '../../data/types.js'
 import TypeSelector from '../common/TypeSelector.vue'
 import RelationPanel from '../common/RelationPanel.vue'
 import { useTypeSelection } from '../../composables/useTypeSelection.js'
+
+const selectorRef = ref(null)
+const panelRef = ref(null)
 
 const { selectedTypes, handleTypesUpdate } = useTypeSelection(1)
 
@@ -44,6 +47,17 @@ function handleTypeSelect(type) {
 
 function handlePanelClose() {
   selectedTypes.value = []
+}
+
+function scrollToPanel() {
+  panelRef.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
+function onTypesUpdate(types) {
+  handleTypesUpdate(types)
+  if (types.length > 0) {
+    scrollToPanel()
+  }
 }
 </script>
 

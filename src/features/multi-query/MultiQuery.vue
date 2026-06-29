@@ -1,18 +1,18 @@
 <template>
   <div class="multi-query-container">
     <div class="content-wrapper">
-      <div class="selector-section">
+      <div ref="selectorRef" class="selector-section">
         <TypeSelector
           :types="TYPES"
           :selected-types="selectedTypes"
           :max-selections="12"
           :show-header="true"
           header-title="选择属性"
-          @update:selected-types="handleTypesUpdate"
+          @update:selected-types="onTypesUpdate"
         />
       </div>
       
-      <div class="panel-section">
+      <div ref="panelRef" class="panel-section">
         <MultiRelationPanel
           :types="selectedTypes"
           @clear="handleClear"
@@ -26,12 +26,27 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { TYPES } from '../../data/types.js'
 import TypeSelector from '../common/TypeSelector.vue'
 import MultiRelationPanel from '../common/MultiRelationPanel.vue'
 import { useTypeSelection } from '../../composables/useTypeSelection.js'
 
+const selectorRef = ref(null)
+const panelRef = ref(null)
+
 const { selectedTypes, handleTypesUpdate, handleClear, handleTypeClick, handleRemoveType, handleAddType } = useTypeSelection(12)
+
+function scrollToPanel() {
+  panelRef.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
+function onTypesUpdate(types) {
+  handleTypesUpdate(types)
+  if (types.length > 0) {
+    scrollToPanel()
+  }
+}
 </script>
 
 <style scoped>
