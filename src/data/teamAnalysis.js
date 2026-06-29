@@ -45,11 +45,18 @@ export function getMultiDefenseCoverage(typeIds) {
 
   const coverage = {}
   for (const attackerType of Object.keys(TYPE_CHART)) {
-    let totalMultiplier = 1
+    let minMultiplier = Infinity
+    let maxMultiplier = -Infinity
     for (const defenderId of typeIds) {
-      totalMultiplier *= getMultiplier(attackerType, defenderId)
+      const mult = getMultiplier(attackerType, defenderId)
+      if (mult < minMultiplier) {
+        minMultiplier = mult
+      }
+      if (mult > maxMultiplier) {
+        maxMultiplier = mult
+      }
     }
-    coverage[attackerType] = totalMultiplier
+    coverage[attackerType] = { min: minMultiplier, max: maxMultiplier }
   }
 
   MULTI_RELATIONS_CACHE.set(cacheKey, coverage)
@@ -78,13 +85,13 @@ export function analyzeMultiTeam(typeIds) {
     }
   }
 
-  for (const [attackerType, multiplier] of Object.entries(defenseCoverage)) {
-    if (multiplier > 1) {
-      weakAgainst.push(attackerType)
-    } else if (multiplier === 1) {
-      normalDefense.push(attackerType)
-    } else {
+  for (const [attackerType, { min, max }] of Object.entries(defenseCoverage)) {
+    if (min < 1) {
       resistAgainst.push(attackerType)
+    } else if (max > 1) {
+      weakAgainst.push(attackerType)
+    } else {
+      normalDefense.push(attackerType)
     }
   }
 
@@ -108,25 +115,32 @@ export function analyzeMultiTeam(typeIds) {
   }
 }
 
-export function suggestTeamCombinations(currentTypeIds, maxSuggestions = 5) {
+export function suggestTeamCombinations(currentTypeIds, maxSuggestions = 4) {
   const currentAnalysis = analyzeMultiTeam(currentTypeIds)
   const suggestions = []
   const allTypeIds = Object.keys(TYPE_CHART)
   const availableTypeIds = allTypeIds.filter(id => !currentTypeIds.includes(id))
+  const currentWeakCount = currentAnalysis.defenseCoverage.weak.length
 
   for (const typeId of availableTypeIds) {
     const newTeam = [...currentTypeIds, typeId]
     const analysis = analyzeMultiTeam(newTeam)
     
     const weakReduction = currentAnalysis.defenseCoverage.weak.length - analysis.defenseCoverage.weak.length
-    const attackIncrease = analysis.attackCoverage.score - currentAnalysis.attackCoverage.score
+    const attackIncrease = analysis.attackCoverage.superEffective.length - currentAnalysis.attackCoverage.superEffective.length
+    const resistGain = analysis.defenseCoverage.resist.length - currentAnalysis.defenseCoverage.resist.length
+    
+    const weakPriority = currentWeakCount > 0 ? 2 : 1
+    
+    const totalScore = attackIncrease * 10 * weakPriority + weakReduction * 20 + resistGain * 5
     
     suggestions.push({
       typeId,
       analysis,
       weakReduction,
       attackIncrease,
-      totalScore: analysis.attackCoverage.score + analysis.defenseCoverage.score
+      resistGain,
+      totalScore
     })
   }
 

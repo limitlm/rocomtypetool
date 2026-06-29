@@ -185,7 +185,10 @@
                 弱点-{{ suggestion.weakReduction }}
               </span>
               <span v-if="suggestion.attackIncrease > 0" class="stat attack-increase">
-                打击+{{ suggestion.attackIncrease }}%
+                打击+{{ suggestion.attackIncrease }}
+              </span>
+              <span v-if="suggestion.resistGain > 0" class="stat resist-increase">
+                抵抗+{{ suggestion.resistGain }}
               </span>
             </div>
             <span class="suggestion-score">{{ suggestion.totalScore }}</span>
@@ -422,6 +425,11 @@ function handleClear() {
 .attack-increase {
   background: rgba(249, 115, 22, 0.15);
   color: #f97316;
+}
+
+.resist-increase {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
 }
 
 .suggestion-score {
