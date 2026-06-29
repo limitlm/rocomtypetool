@@ -20,9 +20,11 @@
     <div v-else class="relations-container">
       <div class="scores-section">
         <div class="score-card attack-score">
-          <div class="score-icon">⚔️</div>
           <div class="score-info">
-            <span class="score-label">打击面</span>
+            <div class="score-left">
+              <span class="score-icon">⚔️</span>
+              <span class="score-label">打击面</span>
+            </div>
             <span class="score-value">{{ analysis?.attackCoverage.score || 0 }}%</span>
           </div>
           <div class="score-bar">
@@ -32,9 +34,11 @@
         </div>
         
         <div class="score-card defense-score">
-          <div class="score-icon">🛡️</div>
           <div class="score-info">
-            <span class="score-label">联防面</span>
+            <div class="score-left">
+              <span class="score-icon">🛡️</span>
+              <span class="score-label">联防面</span>
+            </div>
             <span class="score-value">{{ analysis?.defenseCoverage.score || 0 }}%</span>
           </div>
           <div class="score-bar">
@@ -43,6 +47,40 @@
           <span class="score-desc">{{ analysis?.defenseCoverage.resist.length || 0 }}个属性被抵抗</span>
         </div>
       </div>
+      
+      <section v-if="suggestions.length > 0" class="suggestions-section">
+        <div class="view-header">
+          <span class="view-icon">💡</span>
+          <span class="view-title">配队建议</span>
+          <span class="view-desc">推荐属性组合</span>
+        </div>
+        <div class="suggestions-list">
+          <div 
+            v-for="(suggestion, index) in suggestions.slice(0, 4)" 
+            :key="suggestion.typeId"
+            class="suggestion-card"
+            @click="$emit('addType', suggestion.typeId)"
+          >
+            <span class="suggestion-rank">{{ index + 1 }}</span>
+            <div class="suggestion-type" :style="{ '--type-color': getTypeColor(suggestion.typeId), '--type-bg': getTypeBgColor(suggestion.typeId) }">
+              <span class="suggestion-icon">{{ getTypeIcon(suggestion.typeId) }}</span>
+              <span class="suggestion-name">{{ getTypeName(suggestion.typeId) }}</span>
+            </div>
+            <div class="suggestion-stats">
+              <span v-if="suggestion.weakReduction > 0" class="stat weak-reduction">
+                弱点-{{ suggestion.weakReduction }}
+              </span>
+              <span v-if="suggestion.attackIncrease > 0" class="stat attack-increase">
+                打击+{{ suggestion.attackIncrease }}
+              </span>
+              <span v-if="suggestion.resistGain > 0" class="stat resist-increase">
+                抵抗+{{ suggestion.resistGain }}
+              </span>
+            </div>
+            <span class="suggestion-score">{{ suggestion.totalScore }}</span>
+          </div>
+        </div>
+      </section>
       
       <section class="view-section attack-view" aria-label="打击面分析">
         <div class="view-header">
@@ -81,6 +119,7 @@
                 :type-id="t"
                 @click="$emit('typeClick', $event)"
               />
+              <span v-if="!analysis?.attackCoverage.normal.length" class="empty">无</span>
             </div>
           </div>
           
@@ -140,6 +179,7 @@
                 :type-id="t"
                 @click="$emit('typeClick', $event)"
               />
+              <span v-if="!analysis?.defenseCoverage.normal.length" class="empty">无</span>
             </div>
           </div>
           
@@ -158,40 +198,6 @@
               />
               <span v-if="!analysis?.defenseCoverage.resist.length" class="empty">无</span>
             </div>
-          </div>
-        </div>
-      </section>
-      
-      <section v-if="suggestions.length > 0" class="suggestions-section">
-        <div class="view-header">
-          <span class="view-icon">💡</span>
-          <span class="view-title">配队建议</span>
-          <span class="view-desc">推荐属性组合</span>
-        </div>
-        <div class="suggestions-list">
-          <div 
-            v-for="(suggestion, index) in suggestions.slice(0, 4)" 
-            :key="suggestion.typeId"
-            class="suggestion-card"
-            @click="$emit('addType', suggestion.typeId)"
-          >
-            <span class="suggestion-rank">{{ index + 1 }}</span>
-            <div class="suggestion-type" :style="{ '--type-color': getTypeColor(suggestion.typeId), '--type-bg': getTypeBgColor(suggestion.typeId) }">
-              <span class="suggestion-icon">{{ getTypeIcon(suggestion.typeId) }}</span>
-              <span class="suggestion-name">{{ getTypeName(suggestion.typeId) }}</span>
-            </div>
-            <div class="suggestion-stats">
-              <span v-if="suggestion.weakReduction > 0" class="stat weak-reduction">
-                弱点-{{ suggestion.weakReduction }}
-              </span>
-              <span v-if="suggestion.attackIncrease > 0" class="stat attack-increase">
-                打击+{{ suggestion.attackIncrease }}
-              </span>
-              <span v-if="suggestion.resistGain > 0" class="stat resist-increase">
-                抵抗+{{ suggestion.resistGain }}
-              </span>
-            </div>
-            <span class="suggestion-score">{{ suggestion.totalScore }}</span>
           </div>
         </div>
       </section>
@@ -272,8 +278,15 @@ function handleClear() {
   border-left: 3px solid #22c55e;
 }
 
+.score-left {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
 .score-icon {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
+  flex-shrink: 0;
 }
 
 .score-info {
@@ -283,20 +296,20 @@ function handleClear() {
 }
 
 .score-label {
-  font-size: 0.75rem;
+  font-size: 0.825rem;
   color: #666;
 }
 
 .score-value {
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   font-weight: 700;
   color: #333;
 }
 
 .score-bar {
-  height: 6px;
+  height: 8px;
   background: #e5e7eb;
-  border-radius: 3px;
+  border-radius: 4px;
   overflow: hidden;
 }
 
@@ -315,7 +328,7 @@ function handleClear() {
 }
 
 .score-desc {
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   color: #999;
 }
 
@@ -323,7 +336,7 @@ function handleClear() {
   padding: 0;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 0.75rem;
+  gap: 0.625rem;
   flex: 1;
 }
 
@@ -398,7 +411,7 @@ function handleClear() {
 }
 
 .suggestion-name {
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   font-weight: 600;
   color: var(--type-color);
 }

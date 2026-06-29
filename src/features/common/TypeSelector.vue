@@ -98,7 +98,7 @@ function handleTypeClick(type) {
 .type-selector {
   background: white;
   border-radius: 16px;
-  padding: 0.875rem;
+  padding: 1rem;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
 }
 
@@ -106,26 +106,26 @@ function handleTypeClick(type) {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.75rem;
+  margin-bottom: 0.875rem;
+  padding-bottom: 0.875rem;
   border-bottom: 2px solid rgba(0, 0, 0, 0.08);
 }
 
 .selector-header h3 {
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   color: #333;
   margin: 0;
 }
 
 .selection-status {
-  font-size: 0.75rem;
+  font-size: 0.825rem;
   color: #666;
   margin: 0;
 }
 
 .type-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(18, 1fr);
   gap: 0.5rem;
 }
 
@@ -133,7 +133,7 @@ function handleTypeClick(type) {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0.75rem 0.5rem;
+  padding: 0.5rem 0.5rem;
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.25s ease;
@@ -166,97 +166,75 @@ function handleTypeClick(type) {
 }
 
 .type-icon {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   margin-bottom: 0.25rem;
   line-height: 1.2;
 }
 
 .type-name {
-  font-size: 0.75rem;
+  font-size: 0.675rem;
   font-weight: 600;
   color: var(--type-color);
   text-align: center;
   line-height: 1.2;
 }
 
-/* 桌面超大屏幕 - 9列 */
-@media (min-width: 1280px) {
-  .type-grid {
-    grid-template-columns: repeat(9, 1fr);
-    gap: 0.5rem;
-  }
-  
-  .type-card {
-    padding: 0.625rem 0.375rem;
-  }
-  
-  .type-icon {
-    font-size: 1.4rem;
-  }
-  
-  .type-name {
-    font-size: 0.725rem;
-  }
-}
-
-/* 平板 - 6列 */
-@media (max-width: 1023px) and (min-width: 768px) {
+/* 平板及移动端 - 6列 */
+@media (max-width: 1023px) {
   .type-selector {
-    padding: 0.75rem;
+    padding: 0.875rem;
   }
   
   .type-grid {
     grid-template-columns: repeat(6, 1fr);
-    gap: 0.4375rem;
+    gap: 0.5rem;
   }
   
   .type-card {
-    padding: 0.625rem 0.4375rem;
+    padding: 0.875rem 0.5rem;
   }
   
   .type-icon {
-    font-size: 1.4rem;
-    margin-bottom: 0.1875rem;
+    font-size: 1.6rem;
+    margin-bottom: 0.25rem;
   }
   
   .type-name {
-    font-size: 0.725rem;
+    font-size: 0.825rem;
   }
 }
 
 /* 小平板/大手机 - 6列 */
 @media (max-width: 767px) and (min-width: 540px) {
   .type-selector {
-    padding: 0.625rem;
+    padding: 0.75rem;
   }
   
   .type-grid {
-    grid-template-columns: repeat(6, 1fr);
-    gap: 0.375rem;
+    gap: 0.4375rem;
   }
   
   .type-card {
-    padding: 0.5rem 0.375rem;
+    padding: 0.75rem 0.4375rem;
   }
   
   .type-icon {
-    font-size: 1.3rem;
-    margin-bottom: 0.15625rem;
+    font-size: 1.5rem;
+    margin-bottom: 0.2rem;
   }
   
   .type-name {
-    font-size: 0.7rem;
+    font-size: 0.775rem;
   }
 }
 
-/* 手机 - 3列 */
+/* 手机 - 6列 */
 @media (max-width: 539px) {
   .type-selector {
-    padding: 0.625rem 0.5rem;
+    padding: 0.75rem 0.5rem;
   }
   
   .type-grid {
-    grid-template-columns: repeat(3, 1fr);
     gap: 0.4375rem;
   }
   
@@ -265,8 +243,8 @@ function handleTypeClick(type) {
   }
   
   .type-icon {
-    font-size: 1.35rem;
-    margin-bottom: 0.1875rem;
+    font-size: 1.4rem;
+    margin-bottom: 0.2rem;
   }
   
   .type-name {
@@ -274,26 +252,27 @@ function handleTypeClick(type) {
   }
 }
 
-/* 小屏手机 - 3列紧凑 */
+/* 小屏手机 - 6列紧凑 */
 @media (max-width: 400px) {
   .type-selector {
-    padding: 0.5rem 0.375rem;
+    padding: 0.625rem 0.4375rem;
   }
   
   .type-grid {
-    gap: 0.3125rem;
+    gap: 0.375rem;
   }
   
   .type-card {
-    padding: 0.5rem 0.25rem;
+    padding: 0.5rem 0.3125rem;
   }
   
   .type-icon {
     font-size: 1.25rem;
+    margin-bottom: 0.15rem;
   }
   
   .type-name {
-    font-size: 0.6875rem;
+    font-size: 0.675rem;
   }
 }
 </style>
